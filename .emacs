@@ -44,6 +44,8 @@
 (golden-ratio-mode)
 
 (setq visible-bell 1)
+(windmove-default-keybindings)         ; shifted arrow keys
+(setq windmove-wrap-around t)
 
 ;; See more in elisp/config/appearance.el
 

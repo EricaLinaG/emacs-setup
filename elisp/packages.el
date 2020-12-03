@@ -65,7 +65,7 @@
                      flycheck-pos-tip
                      aggressive-indent
 
-                     # Silver Surfer, grep, fuzzy, ctags.
+                     ;;Silver Surfer, grep, fuzzy, ctags.
                      ag wgrep wgrep-ag fuzzy-match ctags-update
 
 		     rich-minority
@@ -143,7 +143,7 @@
 
 		     ;; themes
                      doom-themes
-                     monokai-theme monokai-alt-theme obsidian-theme atom-dark-them
+                     monokai-theme monokai-alt-theme obsidian-theme atom-dark-theme
                      bubbleberry-theme atom-one-dark-theme
 		     ujelly-theme twilight-theme tronesque-theme tron-theme
 		     tango-2-theme tango-plus-theme tangotango-theme zenburn-theme
