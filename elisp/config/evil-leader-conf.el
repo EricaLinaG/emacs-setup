@@ -28,15 +28,6 @@
 
 (evil-leader/set-leader ",")
 
-;; this is supposed to work, but doesn't.
-;; for some reason evil leader doesn't like two character maps.
-;; (evil-leader/set-key
-;;   "ci" 'evilnc-comment-or-uncomment-lines
-;;   "cl" 'evilnc-comment-or-uncomment-to-the-line
-;;   "cc" 'evilnc-copy-and-comment-lines
-;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
-;;   "cr" 'comment-or-uncomment-region)
-
 ;; this is from the evilnc autoload.. so this is what we have.
 ;; (progn
 ;;   (define-key evil-normal-state-map ",ci" 'evilnc-comment-or-uncomment-lines)
@@ -94,6 +85,7 @@
 (defvar helm-sub-map
   (let (helm-sub-map)
     (define-prefix-command 'helm-sub-map)
+    (define-key helm-sub-map (kbd "a") #'helm-ag)
     (define-key helm-sub-map (kbd "m") #'helm-man-woman)
     (define-key helm-sub-map (kbd "i") #'helm-semantic-or-imenu)
     (define-key helm-sub-map (kbd "h") #'helm-help)
@@ -102,7 +94,8 @@
     (define-key helm-sub-map (kbd "f") #'helm-find)
     (define-key helm-sub-map (kbd "l") #'helm-locate)
     (define-key helm-sub-map (kbd "r") #'helm-regexp)
-    (define-key helm-sub-map (kbd "M") #'helm-all-mark-ringss)
+    (define-key helm-sub-map (kbd "p") #'helm-list-elisp-packages)
+    (define-key helm-sub-map (kbd "M") #'helm-all-mark-rings)
     helm-sub-map))
 
 (defvar language-sub-map
@@ -215,7 +208,7 @@
   ;;; Finding
   "t" 'find-tag-without-ns  ;; ctags
   "v" 'cider-find-var
-  "a" 'projectile-ag
+  "a" 'helm-ag
   "s" 'evil-ace-jump-word-mode  ;;  ace jump search
 
 
