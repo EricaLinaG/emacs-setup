@@ -17,10 +17,10 @@
 (setq ring-bell-function 'ignore)
 
 ;; font settng functions
-(require 'cl)
+(require 'cl-lib)
 
-(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-28-*-*-*-m-0-iso10646-1")
+(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
 
 ;; make fringe smaller
-(if (fboundp 'fringe-mode)
-    (fringe-mode 4))
+;; (if (fboundp 'fringe-mode)
+;;     (fringe-mode 4))

@@ -10,6 +10,7 @@
 (require 'cider-doc)
 (require 'clj-refactor)
 (require 'git-frame)
+(require 'helm)
 
 ;; (require 'google-translate)
 ;; (require 'ispell)
@@ -49,7 +50,6 @@
 (defvar cider-sub-map
   (let (cider-sub-map)
     (define-prefix-command 'cider-sub-map)
-    (define-key cider-sub-map (kbd "G") #'cider-grimoire-eww)
     (define-key cider-sub-map (kbd "n") #'cider-browse-ns)
     (define-key cider-sub-map (kbd "N") #'cider-browse-ns-all)
     (define-key cider-sub-map (kbd "u") #'cider-undef)
@@ -91,6 +91,19 @@
     (define-key yasnippet-sub-map (kbd "e") #'yas-expand-snippet)
     yasnippet-sub-map))
 
+(defvar helm-sub-map
+  (let (helm-sub-map)
+    (define-prefix-command 'helm-sub-map)
+    (define-key helm-sub-map (kbd "m") #'helm-man-woman)
+    (define-key helm-sub-map (kbd "i") #'helm-semantic-or-imenu)
+    (define-key helm-sub-map (kbd "h") #'helm-help)
+    (define-key helm-sub-map (kbd "o") #'helm-occur)
+    (define-key helm-sub-map (kbd "b") #'helm-buffers-list)
+    (define-key helm-sub-map (kbd "f") #'helm-find)
+    (define-key helm-sub-map (kbd "l") #'helm-locate)
+    (define-key helm-sub-map (kbd "r") #'helm-regexp)
+    (define-key helm-sub-map (kbd "M") #'helm-all-mark-ringss)
+    helm-sub-map))
 
 (defvar language-sub-map
   (let (language-sub-map)
@@ -185,7 +198,7 @@
   ;; h - grimoire web
   ;; j - Java doc
   "r" 'cider-sub-map  ;; c is used by nerd-commenter. r = repl.
-  "b" 'buffer-sub-map  ;; manage buffers.
+  ;; "c" 'buffer-sub-map  ;; manage buffers, cbnext, etc..
 
 
   ;; Refactoring, code snippets etc.
@@ -208,15 +221,17 @@
 
   "G" 'golden-ratio-mode
   "g" 'magit-other-frame  ;; magit is git.
+  "i" 'helm-semantic-or-imenu
   "j" 'dired-jump
 
-  "f" 'ido-find-file
-  "O" 'ido-find-file-other-window
+  "f" 'helm-find-files
+  ;;"O" 'ido-find-file-other-window
 
   "o" 'projectile-switch-to-buffer-other-window
-  "p" 'projectile-switch-to-buffer
-  "P" 'projectile-ibuffer
+  "p" 'helm-projectile
   "B" 'ibuffer
+  "b" 'helm-buffers-list
+  "m" 'helm-man-woman
 
   "x" 'smex  ;; M-x.
   "k" 'kill-this-buffer

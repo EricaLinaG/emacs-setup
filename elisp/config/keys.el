@@ -40,16 +40,23 @@
 (global-set-key (kbd "C-#") 'evil-search-word-backward)
 
 (require 'git-frame)
+(require 'magit-mode)
+
+;; force magit into a new temporary frame so it doesn't mess with my
+;; current frame.
 (global-set-key (kbd "C-c g") 'magit-other-frame)
 (define-key magit-mode-map (kbd "q") 'delete-frame)
 
 ;;(global-set-key (kbd "C-c g")        'magit-status)
-(global-set-key (kbd "C-c c")        'evilnc-copy-and-comment-lines)
-(global-set-key (kbd "C-c l")        'evilnc-comment-or-uncomment-lines)
-(global-set-key (kbd "C-c b")        'evilnc-comment-or-uncomment-paragraphs)
-(global-set-key (kbd "C-c r")        'evilnc--comment-or-uncomment-region)
-(global-set-key (kbd "C-c s")        'cb-next-shell-window)
-(global-set-key (kbd "C-c S")        'cb-next-cider-window)
+;;(global-set-key (kbd "C-c c")        'evilnc-copy-and-comment-lines)
+;;(global-set-key (kbd "C-c l")        'evilnc-comment-or-uncomment-lines)
+;;(global-set-key (kbd "C-c b")        'evilnc-comment-or-uncomment-paragraphs)
+(global-set-key (kbd "C-c r")       'evilnc--comment-or-uncomment-region)
+(global-set-key (kbd "C-c s")       'cb-next-shell-window)
+(global-set-key (kbd "C-c S")       'cb-next-cider-window)
+
+(global-set-key (kbd "C-c w")       'ace-window)
+(global-set-key (kbd "C-c b")       'frog-jump-buffer)
 
 (global-set-key (kbd "<f1>")        'smex)
 (global-set-key (kbd "C-<f1>")      'redraw-display)

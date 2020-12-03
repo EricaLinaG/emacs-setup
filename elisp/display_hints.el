@@ -1,7 +1,4 @@
 ;; set the initial frame size
-
-
-
 ;;(setq initial-frame-alist '((top . 20) (left . 0) (width . 200) (height . 60)))
 
 

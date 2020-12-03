@@ -87,6 +87,7 @@
     (newline arg)
     (indent-according-to-mode)))
 
+;;; electrify for paredit...
 (defun par-edit-mode-hook-func ()
   (paredit-mode t)
   (eldoc-mode)

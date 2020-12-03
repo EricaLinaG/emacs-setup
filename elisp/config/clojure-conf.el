@@ -121,8 +121,8 @@
 (setq auto-mode-alist (append '(("\\.cljs$" . clojure-mode))
                               auto-mode-alist))
 
-(dolist (x '(scheme emacs-lisp lisp clojure))
-  (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'enable-paredit-mode)
+(dolist (x '(scheme emacs-lisp lisp clojure hy python sh))
+  ;;(add-hook (intern (concat (symbol-name x) "-mode-hook")) 'enable-paredit-mode)
   (add-hook (intern (concat (symbol-name x) "-mode-hook")) 'rainbow-delimiters-mode))
 
 ;; Pull in the awesome clj-refactor lib by magnars
