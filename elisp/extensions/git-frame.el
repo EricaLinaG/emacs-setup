@@ -5,6 +5,7 @@
 
 ;;; Code:
 (require 'magit-git)
+(require 'magit-status)
 
 (defun magit-other-frame ()
   "Start Magit status in another frame."
