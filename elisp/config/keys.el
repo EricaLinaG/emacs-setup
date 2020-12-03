@@ -1,43 +1,9 @@
-;;Example 11-6. ``.emacs'' example for naive page scrolling with Wheeled Mouse
+;;; package: --- Summary
+;;; Commentary:
+;; Mostly try not to step on any important keys, or usurp power carefully.
+;; look for evil-leader conf and perhaps hydra-conf as well.
+;;; Code:
 
-;;;; wheel mouse
-;;(global-set-key [mouse-4] 'scroll-down)
-;;(global-set-key [mouse-5] 'scroll-up)
-
-;;; MacOS X specific stuff
-;(setq mac-command-key-is-meta nil)
-
-;(setq mac-command-modifier 'meta')
-;(setq mac-option-modifier 'super')
-
-;; Define the return key to avoid problems on MacOS X
-;(define-key function-key-map [return] [13])
-
-;(global-set-key [(alt a)] 'mark-whole-buffer)
-;(global-set-key [(alt v)] 'yank)
-;(global-set-key [(alt c)] 'kill-ring-save)
-;(global-set-key [(alt x)] 'kill-region)
-;(global-set-key [(alt s)] 'save-buffer)
-;(global-set-key [(alt l)] 'goto-line)
-;(global-set-key [(alt o)] 'find-file)
-;(global-set-key [(alt f)] 'isearch-forward)
-;(global-set-key [(alt g)] 'isearch-repeat-forward)
-;(global-set-key [(alt w)]
-;                (lambda () (interactive) (kill-buffer (current-buffer))))
-;(global-set-key [(alt .)] 'keyboard-quit)
-
-;; I disabled this since I want to avoid hitting Cmd-q accidentally.
-;(global-set-key [(alt q)] 'save-buffers-kill-emacs)
-
-;(global-set-key [next] 	   'pager-page-down)
-;;;     (global-set-key "\ev"	   'pager-page-up)
-;(global-set-key [prior]	   'pager-page-up)
-;(global-set-key '[(meta up)]    'pager-row-up)
-;;;     (global-set-key '[M-kp-8]  'pager-row-up)
-;(global-set-key '[(meta down)]  'pager-row-down)
-;;;     (global-set-key '[M-kp-2]  'pager-row-down)
-(global-set-key (kbd "C-*") 'evil-search-word-forward)
-(global-set-key (kbd "C-#") 'evil-search-word-backward)
 
 (require 'git-frame)
 (require 'magit-mode)
@@ -47,6 +13,9 @@
 (global-set-key (kbd "C-c g") 'magit-other-frame)
 (define-key magit-mode-map (kbd "q") 'delete-frame)
 
+
+(global-set-key (kbd "C-*")         'evil-search-word-forward)
+(global-set-key (kbd "C-#")         'evil-search-word-backward)
 ;;(global-set-key (kbd "C-c g")        'magit-status)
 ;;(global-set-key (kbd "C-c c")        'evilnc-copy-and-comment-lines)
 ;;(global-set-key (kbd "C-c l")        'evilnc-comment-or-uncomment-lines)

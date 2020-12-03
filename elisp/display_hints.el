@@ -1,16 +1,6 @@
 ;; set the initial frame size
 ;;(setq initial-frame-alist '((top . 20) (left . 0) (width . 200) (height . 60)))
 
-
-(setq visible-bell 1)
-
-;;;;;;;;;;;;;;;;;;;;;;
-;; CYCLE BUF
-;; set the shell you want cycle-shells to create for you.
-;; the default is eshell.
-;;(setq cb-shell-command 'multi-term)
-
-
 ;;Display-Buffer-Alist controls window display choices.
                                         ; display buffer alist is not really working in 24.3 as far
                                         ; as I can tell. some settings do work, but not all. Waiting for 24.4

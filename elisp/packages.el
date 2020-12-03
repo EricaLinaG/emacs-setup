@@ -5,25 +5,28 @@
                      google-translate
                      langtool which-key
 
-                     evil-mu4e
-
                      ;;navigation
 		     ace-jump-mode ace-window frog-jump-buffer
 
                      ;; basic tools
                      el-get
                      gited
-                     ;;ido
+                     ;; might go back to ido for some things. Helm is noisy but great
+                     ;; for somethings.
+                     ;;ido ido-flx
                      ;;ivy
 		     smex
+
+
                      helm
                      helm-projectile
-                     helm helm-fish-completion
+                     helm-fish-completion
                      helm-evil-markers
                      helm-descbinds
+
                      helm-ag
                      helm-sly
-                     origami
+
                      dash dash-functional
 
                      ;; exwm window manager
@@ -35,31 +38,46 @@
                      fish-completion
 
                      ;; evil-mode
-                     evil evil-surround evil-nerd-commenter ;; lispy lispyville
-                     evil-leader evil-org undo-tree ;; smartparens evil-smartparens evil-cleverparens
+                     evil
+                     evil-nerd-commenter
+                     evil-leader
+                     evil-org
+                     evil-mu4e
+
+                     evil-surround
                      highlight-parentheses
                      paredit evil-paredit
+                     ;; smartparens evil-smartparens evil-cleverparens
+                     ;; lispy lispyville
+		     rainbow-mode
+                     mic-paren
 
                      ;; git
                      magit auto-compile git-gutter
 
                      ;;coding support
                      eldoc
-                     flycheck-tip kibit-helper
+                     company
+                     origami
+                     undo-tree
+                     flycheck-tip
+                     kibit-helper
                      flycheck-pos-tip
                      aggressive-indent
-		     rainbow-mode
-                     ag wgrep wgrep-ag fuzzy-match ctags-update
-		     rich-minority company find-file-in-project
-                     mic-paren
 
-                     ;; clojure
+                     # Silver Surfer, grep, fuzzy, ctags.
+                     ag wgrep wgrep-ag fuzzy-match ctags-update
+
+		     rich-minority
+
+                     ;; clojure -- need to rexamine this. lots of newer stuff.
                      cider clj-refactor ac-cider
                      cider-eval-sexp-fu
                      clojure-mode eval-sexp-fu clojure-mode-extra-font-locking ;popup
                      uuid rainbow-delimiters flycheck-clojure
 
                      json-mode
+                     markdown-mode
 
                      ;; clojure script
                      cljsbuild-mode smartscan
@@ -97,7 +115,6 @@
                      python-docstring
                      py-autopep8
                      py-yapf pydoc
-                     markdown-mode
 
                      ;;org mode.
                      org
@@ -115,8 +132,7 @@
 
                      ;;modeline
                      smart-mode-line ; needs rich-minority one way or another.
-                     all-the-icons
-                     ;; doom-modeline
+                     doom-modeline all-the-icons ;; the doom modeline
 
                      ;;extras
                      ;;treemacs treemacs-evil treemacs-magit treemacs-projectile
@@ -127,11 +143,12 @@
 
 		     ;; themes
                      doom-themes
+                     monokai-theme monokai-alt-theme obsidian-theme atom-dark-them
+                     bubbleberry-theme atom-one-dark-theme
 		     ujelly-theme twilight-theme tronesque-theme tron-theme
 		     tango-2-theme tango-plus-theme tangotango-theme zenburn-theme
 		     waher-theme underwater-theme toxi-theme sublime-themes
 		     subatomic-theme sunny-day-theme subatomic256-theme steady-theme
-		     ;;stekene-theme
                      soft-stone-theme soft-morning-theme purple-haze-theme
 		     noctilux-theme naquadah-theme leuven-theme lavender-theme
 		     light-soap-theme jujube-theme ir-black-theme inkpot-theme heroku-theme

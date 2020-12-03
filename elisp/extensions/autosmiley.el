@@ -1,4 +1,4 @@
-;;; autosmiley.el --- Convert smileys into their graphical representation
+;; autosmiley.el --- Convert smileys into their graphical representation
 
 ;; Author: Damyan Pepper (gmail account, username damyanp)
 ;; Created: 20060315
@@ -70,9 +70,9 @@
 
 (defun autosmiley-change (beg end &optional old-len)
   (let ((beg-line (save-excursion (goto-char beg) (line-beginning-position)))
-		(end-line (save-excursion (goto-char end) (line-end-position))))
-	(autosmiley-remove-smileys beg-line end-line)
-	(autosmiley-add-smileys beg-line end-line)))
+	(end-line (save-excursion (goto-char end) (line-end-position))))
+    (autosmiley-remove-smileys beg-line end-line)
+    (autosmiley-add-smileys beg-line end-line)))
 
 
 ;;;###autoload
@@ -81,15 +81,15 @@
 cute little graphical smileys."
   :group 'autosmiley :lighter " :)"
   (save-excursion
-	(save-restriction
-	  (widen)
-	  (autosmiley-remove-smileys (point-min) (point-max))
-	  (if autosmiley-mode
-		  (progn
-			(unless smiley-cached-regexp-alist
-			  (smiley-update-cache))
-			(jit-lock-register 'autosmiley-change))
-		(jit-lock-unregister 'autosmiley-change)))))
+    (save-restriction
+      (widen)
+      (autosmiley-remove-smileys (point-min) (point-max))
+      (if autosmiley-mode
+	  (progn
+	    (unless smiley-cached-regexp-alist
+	      (smiley-update-cache))
+	    (jit-lock-register 'autosmiley-change))
+	(jit-lock-unregister 'autosmiley-change)))))
 
 
 (provide 'autosmiley)
