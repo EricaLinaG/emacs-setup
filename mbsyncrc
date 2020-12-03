@@ -1,0 +1,163 @@
+# THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
+# - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
+#   SPECIFICATION OF AN IMAP ACCOUNT)
+# - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+#
+# FOR INSTANCE IN THE SPECIFICATION BELOW:
+#
+# gmail-inbox gets the folder INBOX, ARCHIVE, and everything under "ARCHIVE*"
+# gmail-trash gets only the "[Gmail]/Trash" folder and stores it to the local "trash" folder
+
+
+#===============================================================================
+
+# The "Channel" is used when invoking mbsync to tell it which Channel to "watch"
+# Master tells it which IMAPStore to look at, (in this case look for the one called "just.a.label"
+# Slave is where to put it, (this _can_ be a remote IMAP server! Cool for migrations)
+# the last three are more example settings. Check the man for more.
+
+# A Channel can pull from multiple accounts or server at the same time!
+
+#================================================================================
+
+SyncState *
+Create Both
+#Expunge Both
+# PassCmd "security find-generic-password -s mbsync-gmail-password -w"
+# UseIMAPS yes
+#SSLType IMAPS
+#SSLVersions SSLv3
+
+IMAPAccount mail1-account
+	Host       imap.gmail.com
+	User       user1@gmail.com
+	#Pass      not-very-secure-password.
+	SSLType IMAPS
+	SSLVersions SSLv3
+	AuthMechs LOGIN
+	PassCmd "cat ~/.mail/junk"  # just an example, use keychains, or whatever you want to retrieve the password.
+	CertificateFile ~/.mail/certs.pem
+
+# Create the certs file with this command.
+# openssl s_client -connect imap.gmail.com:993 -showcerts
+
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore mail1-remote
+	Account mail1-account
+
+MaildirStore mail1-local
+	Path  ~/.mail/mail1/
+	Inbox ~/.mail/mail1/INBOX
+
+Channel mail1-inbox
+	Master :mail1-remote:"INBOX"
+	Slave  :mail1-local:inbox
+
+Channel mail1-sent
+	Master :mail1-remote:"[Gmail]/Sent Mail"
+	Slave  :mail1-local:sent
+
+Channel mail1-trash
+	Master :mail1-remote:"[Gmail]/Trash"
+	Slave  :mail1-local:trash
+
+Group mail1
+	Channel mail1-inbox
+	Channel mail1-sent
+	Channel mail1-trash
+
+#----------------------------------------
+
+IMAPAccount mail2-account
+	Host       imap.gmail.com
+	User       user2@gmail.com
+	SSLType IMAPS
+	SSLVersions SSLv3
+	AuthMechs LOGIN
+	PassCmd "cat ~/.mail/junk"
+	CertificateFile ~/.mail/certs.pem
+
+IMAPStore mail2-remote
+	Account mail2-account
+
+MaildirStore mail2-local
+	Path  ~/.mail/mail2/
+	Inbox ~/.mail/mail2/INBOX
+
+Channel mail2-inbox
+	Master :mail2-remote:"INBOX"
+	Slave  :mail2-local:inbox
+
+Channel mail2-sent
+	Master :mail2-remote:"[Gmail]/Sent Mail"
+	Slave  :mail2-local:sent
+
+Channel mail2-trash
+	Master :mail2-remote:"[Gmail]/Trash"
+	Slave  :mail2-local:trash
+
+Group mail2
+	Channel mail2-inbox
+	Channel mail2-sent
+
+#----------------------------------------
+
+IMAPAccount mail3-account
+	Host       imap.gmail.com
+	User       user3@yetidata.com
+	SSLType IMAPS
+	SSLVersions SSLv3
+	AuthMechs LOGIN
+	PassCmd "cat ~/.mail/junk"
+	CertificateFile ~/.mail/certs.pem
+
+IMAPStore mail3-remote
+	Account mail3-account
+
+MaildirStore mail3-local
+	Path  ~/.mail/mail3/
+	Inbox ~/.mail/mail3/INBOX
+
+Channel mail3-inbox
+	Master :mail3-remote:"INBOX"
+	Slave  :mail3-local:inbox
+
+Channel mail3-sent
+	Master :mail3-remote:"[Gmail]/Sent Mail"
+	Slave  :mail3-local:sent
+
+Channel mail3-trash
+	Master :mail3-remote:"[Gmail]/Trash"
+	Slave  :mail3-local:trash
+
+Group mail3
+	Channel mail3-inbox
+	Channel mail3-sent
+
+
+# GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
+# MBSYNC ON A GROUP TO SYNC ALL CHANNELS
+#
+# FOR INSTANCE: "mbsync allmail" GETS MAIL FROM
+# "gmail-inbox", "gmail-sent", and "gmail-trash"
+#
+
+Group allmail
+	Channel mail1-inbox
+	Channel mail1-sent
+	Channel mail1-trash
+	Channel mail2-inbox
+	Channel mail2-sent
+	Channel mail2-trash
+	Channel mail3-inbox
+	Channel mail3-sent
+	Channel mail3-trash
