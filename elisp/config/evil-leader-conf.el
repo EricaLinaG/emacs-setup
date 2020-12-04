@@ -28,6 +28,15 @@
 
 (evil-leader/set-leader ",")
 
+;; this is supposed to work, but doesn't.
+;; for some reason evil leader doesn't like two character maps.
+;; (evil-leader/set-key
+;;   "ci" 'evilnc-comment-or-uncomment-lines
+;;   "cl" 'evilnc-comment-or-uncomment-to-the-line
+;;   "cc" 'evilnc-copy-and-comment-lines
+;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
+;;   "cr" 'comment-or-uncomment-region)
+
 ;; this is from the evilnc autoload.. so this is what we have.
 ;; (progn
 ;;   (define-key evil-normal-state-map ",ci" 'evilnc-comment-or-uncomment-lines)

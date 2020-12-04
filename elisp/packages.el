@@ -1,39 +1,70 @@
+;;; package --- Summary
+;;; Commentary:
+;; All my packages, easy to install and update.
+;;; Code
+
 (defvar mypackages '(golden-ratio
                      projectile
 
                      ;; Multi-language support
                      google-translate
-                     langtool which-key
+                     langtool
 
                      ;;navigation
 		     ace-jump-mode ace-window frog-jump-buffer
 
                      ;; basic tools
+                     which-key
                      el-get
                      gited
-                     ;; might go back to ido for some things. Helm is noisy but great
-                     ;; for somethings.
-                     ;;ido ido-flx
-                     ;;ivy
+
+                     ;; Choose: ido/smex or ivy/swiper/counsel and/or helm.
+                     ;; ido/smex and helm are known to play nice. See helm doc.
+                     ;;
+                     ;; find-file = counsel-find-file = helm-find-file
+                     ;; smex = counsel-m-x = helm-m-x ~= Nicer M-x...
+                     ;; ido = ivy =  helm = fuzzy search of candidates, in many situations,
+                     ;; files, buffers, symbols.
+                     ;; swiper = helm_swoop = occur incrementally..
+                     ;; I do like helm on the big wide screen, because the minibuffer is so
+                     ;; far away down there in the corner. Both Ido and ivy are more minibuffer
+                     ;; centric. I've used ido and smex since the beginning... 20+ years.
+                     ;; trying out helm
+
+                     ;;ido ido-flx ido-imenu
 		     smex
+                     ;;ivy swiper counsel
 
 
+                     ;; helm - an experiment in progess...
                      helm
                      helm-projectile
                      helm-fish-completion
                      helm-evil-markers
                      helm-descbinds
+                     helm-swoop
+                     helm-org
 
                      helm-ag
                      helm-sly
+                     helm-clojuredocs
+
+                     ;; hydra -- A lot to think about here...
+                     ;; https://github.com/abo-abo/hydra/wiki/Hydras-by-Topic
+                     ;; have to bind them, and try them, and make some.
+                     ;; maybe evil-leader stuff can just pop over.
+                     ;; maybe a few at first, that I use all the time.
+                     ;; ,fqgbsiaw   hmmm. don't know it's necessary...
+                     hydra pretty-hydra cider-hydra major-mode-hydra
 
                      dash dash-functional
 
-                     ;; exwm window manager
+                     ;; exwm window manager - another exploration..
                      exwm
                      helm-exwm
                      exwm-mff
 
+                     ;; eshell
                      eshell-autojump
                      fish-completion
 
@@ -44,19 +75,21 @@
                      evil-org
                      evil-mu4e
 
+                     ;; Parentheses.
                      evil-surround
                      highlight-parentheses
                      paredit evil-paredit
-                     ;; smartparens evil-smartparens evil-cleverparens
-                     ;; lispy lispyville
+                     ;; smartparens evil-smartparens evil-cleverparens ;; - finicky setup.
+                     ;; lispy lispyville ;; -- not a fan.
 		     rainbow-mode
                      mic-paren
 
                      ;; git
-                     magit auto-compile git-gutter
+                     magit git-gutter
 
                      ;;coding support
                      eldoc
+                     auto-compile
                      company
                      origami
                      undo-tree
@@ -65,10 +98,9 @@
                      flycheck-pos-tip
                      aggressive-indent
 
-                     ;;Silver Surfer, grep, fuzzy, ctags.
+                     ;; Silver Surfer, grep, fuzzy, ctags.
                      ag wgrep wgrep-ag fuzzy-match ctags-update
 
-		     rich-minority
 
                      ;; clojure -- need to rexamine this. lots of newer stuff.
                      cider clj-refactor ac-cider
@@ -76,31 +108,31 @@
                      clojure-mode eval-sexp-fu clojure-mode-extra-font-locking ;popup
                      uuid rainbow-delimiters flycheck-clojure
 
-                     json-mode
-                     markdown-mode
-
                      ;; clojure script
                      cljsbuild-mode smartscan
 
                      lua-mode
                      company-lua
                      ruby-mode
+                     hy-mode
+
+                     json-mode
+                     markdown-mode
                      yaml-mode
                      apache-mode
-                     hy-mode
 
                      ;;Shell
                      company-shell
 
                      ;;C/C++
-                     ;; Not sure, need to pursue a C/C++ setup
-                     ;;irony company-irony company-ctags counsel-etags ;company-rtags
+                     ;; Not sure, need to pursue a better C/C++ setup
+                     ;;irony company-irony company-ctags helm-etags ;company-rtags
 
                      ;;haskell
                      haskell-mode
                      ghc
                      haskell-snippets
-                     dante
+                     dante ;; GHCi
                      helm-ghc
                      flycheck-haskell
 
@@ -122,7 +154,7 @@
                      org-bullets
                      visual-fill-column
 
-                     ;;slack
+                     ;;slack - hasn't worked very well so far..
                      slack
                      oauth2
                      alert
@@ -130,8 +162,8 @@
                      ;;helm-slack
 
 
-                     ;;modeline
-                     smart-mode-line ; needs rich-minority one way or another.
+                     ;; modeline
+                     ;; smart-mode-line rich-minority
                      doom-modeline all-the-icons ;; the doom modeline
 
                      ;;extras

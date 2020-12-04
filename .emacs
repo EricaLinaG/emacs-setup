@@ -14,24 +14,28 @@
 	       "~/elisp/config")
 	      load-path))
 
+
 ;; so I don't have to look at a white screen while it
-;; starts up. I do this first.
+;; loads everything. I do this first.
+(load "appearance")
 (load "themes-init")
-;; this is a local theme. Code is in themes.
+;; this is a local theme I made. Code is in themes.
 (load-theme 'strange-deeper-blue t)
 (enable-theme 'strange-deeper-blue)
 
-;; Byte-compile-directory makes sure everything
-;; is compiled up to date, and then loads it.
-(load "bytecompiledir")
+(load "packages") ; make sure all the packages are installed.
+
+;; load up everything, compiling as needed.
+;; still the simplest, even though just load could
+;; work if auto compile was on for loading and saving..
+;; theoretically, if everything was just right.
+;; takes the same amount of time either way.
+(require 'bytecompiledir)
 (byte-compile-directory "~/elisp/extensions")
+(byte-compile-directory "~/elisp/config")
 (byte-compile-directory "~/elisp/themes")
 
 (load "display_hints") ; advice for various buffers.
-(load "packages") ; make sure all the packages are installed.
-
-(byte-compile-directory "~/elisp/config")
-
 
 ;;; Some global modes
 ;;; Turn on Vi mode.
@@ -44,10 +48,10 @@
 (golden-ratio-mode)
 
 (setq visible-bell 1)
+
+;; windmove navigation
 (windmove-default-keybindings)         ; shifted arrow keys
 (setq windmove-wrap-around t)
-
-;; See more in elisp/config/appearance.el
 
 ;;; End of .emacs.
 
@@ -74,7 +78,7 @@
     (string-to-list "QJKMWV")
     (number-sequence 44 64)))
  '(package-selected-packages
-   '(night-owl-theme alect-themes bubbleberry-theme monokai-theme atom-dark-theme exec-path-from-shell helm dash-functional dash idomenu company rich-minority wgrep flx-ido org ruby-mode haskell-mode lua-mode evil eval-sexp-fu clojure-mode cider projectile zoutline zenburn-theme yaml-mode which-key wgrep-ag waher-theme visual-fill-column uuid undo-tree underwater-theme ujelly-theme twilight-theme tronesque-theme tron-theme treemacs toxi-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme steady-theme solarized-theme soft-stone-theme soft-morning-theme smyx-theme smex smartscan smart-mode-line slack skewer-mode rainbow-mode rainbow-delimiters python-docstring pyenv-mode pydoc py-yapf py-autopep8 purple-haze-theme popwin paredit-menu origami org-bullets org-babel-eval-in-repl oldlace-theme nose noctilux-theme naquadah-theme multi-term mic-paren markdown-mode magit lush-theme light-soap-theme leuven-theme lavender-theme langtool kibit-helper jujube-theme json-mode jabber ir-black-theme inkpot-theme iedit hy-mode highlight-parentheses heroku-theme helm-sly helm-projectile helm-ghc helm-fish-completion helm-exwm helm-evil-markers helm-descbinds helm-ag haskell-snippets gotham-theme google-translate golden-ratio github-theme gited git-gutter gist gandalf-theme fuzzy-match frog-jump-buffer flycheck-tip flycheck-pos-tip flycheck-haskell flycheck-guile flycheck-clojure flx floobits flatui-theme flatland-theme firecode-theme find-file-in-project exwm-mff expand-region evil-surround evil-smartparens evil-paredit evil-org evil-nerd-commenter evil-mu4e evil-leader evil-cleverparens espresso-theme eshell-syntax-highlighting eshell-autojump esh-autosuggest elpy el-get ein edn doom-themes doom-modeline django-theme deep-thought-theme darkmine-theme darkburn-theme dark-krystal-theme darcula-theme dante cyberpunk-theme ctags-update counsel company-shell company-lua clues-theme clojure-mode-extra-font-locking cljsbuild-mode clj-refactor cider-eval-sexp-fu busybee-theme boron-theme bliss-theme autopair auto-compile assemblage-theme apache-mode ample-zen-theme ample-theme align-cljlet aggressive-indent ag ace-jump-mode ace-jump-buffer ac-cider))
+   '(helm-clojuredocs night-owl-theme alect-themes bubbleberry-theme monokai-theme atom-dark-theme exec-path-from-shell helm dash-functional dash idomenu company rich-minority wgrep flx-ido org ruby-mode haskell-mode lua-mode evil eval-sexp-fu clojure-mode cider projectile zoutline zenburn-theme yaml-mode which-key wgrep-ag waher-theme visual-fill-column uuid undo-tree underwater-theme ujelly-theme twilight-theme tronesque-theme tron-theme treemacs toxi-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme steady-theme solarized-theme soft-stone-theme soft-morning-theme smyx-theme smex smartscan smart-mode-line slack skewer-mode rainbow-mode rainbow-delimiters python-docstring pyenv-mode pydoc py-yapf py-autopep8 purple-haze-theme popwin paredit-menu origami org-bullets org-babel-eval-in-repl oldlace-theme nose noctilux-theme naquadah-theme multi-term mic-paren markdown-mode magit lush-theme light-soap-theme leuven-theme lavender-theme langtool kibit-helper jujube-theme json-mode jabber ir-black-theme inkpot-theme iedit hy-mode highlight-parentheses heroku-theme helm-sly helm-projectile helm-ghc helm-fish-completion helm-exwm helm-evil-markers helm-descbinds helm-ag haskell-snippets gotham-theme google-translate golden-ratio github-theme gited git-gutter gist gandalf-theme fuzzy-match frog-jump-buffer flycheck-tip flycheck-pos-tip flycheck-haskell flycheck-guile flycheck-clojure flx floobits flatui-theme flatland-theme firecode-theme find-file-in-project exwm-mff expand-region evil-surround evil-smartparens evil-paredit evil-org evil-nerd-commenter evil-mu4e evil-leader evil-cleverparens espresso-theme eshell-syntax-highlighting eshell-autojump esh-autosuggest elpy el-get ein edn doom-themes doom-modeline django-theme deep-thought-theme darkmine-theme darkburn-theme dark-krystal-theme darcula-theme dante cyberpunk-theme ctags-update counsel company-shell company-lua clues-theme clojure-mode-extra-font-locking cljsbuild-mode clj-refactor cider-eval-sexp-fu busybee-theme boron-theme bliss-theme autopair auto-compile assemblage-theme apache-mode ample-zen-theme ample-theme align-cljlet aggressive-indent ag ace-jump-mode ace-jump-buffer ac-cider))
  '(sclang-auto-scroll-post-buffer t)
  '(sclang-eval-line-forward nil))
 (custom-set-faces

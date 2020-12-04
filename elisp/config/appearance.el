@@ -1,3 +1,7 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
+
 ;;make sure ansi colour character escapes are honoured
 (require 'ansi-color)
 (ansi-color-for-comint-mode-on)
@@ -8,19 +12,19 @@
 ;; Line-wrapping
 (set-default 'fill-column 72)
 
-                                        ;get rid of clutter
+;;get rid of clutter, menus, scrollbars, etc.
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
-                                        ;remove bells
+;;remove bells
 (setq ring-bell-function 'ignore)
 
 ;; font settng functions
 (require 'cl-lib)
 
-(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
+(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
 
-;; make fringe smaller
-;; (if (fboundp 'fringe-mode)
-;;     (fringe-mode 4))
+;;make fringe bigger
+(if (fboundp 'fringe-mode)
+    (fringe-mode 10))

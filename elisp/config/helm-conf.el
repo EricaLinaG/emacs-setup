@@ -33,9 +33,6 @@
 (require 'helm)
 (require 'helm-config)
 
-
-
-
 ;; turn on fuzzy matching
 (setq helm-buffers-fuzzy-matching t
       helm-recentf-fuzzy-match    t)
@@ -81,7 +78,8 @@
 (helm-autoresize-mode t)
 (semantic-mode 1)
 
-;; for goldenratio. We dont want it interfering.
+;; for golden ratio. We dont want it interfering.
+;; They don't get along...
 (defun pl/helm-alive-p ()
   (if (boundp 'helm-alive-p)
       (symbol-value 'helm-alive-p)))
@@ -97,8 +95,55 @@
               (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
 (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
 
+
 ;; browse keybinding descriptions
 (require 'helm-descbinds)
 (helm-descbinds-mode)
+
+
+;; not sure I will like this. I can get fish completion in eshell one way or another...
+(when (require 'helm-fish-completion nil 'noerror)
+  (define-key shell-mode-map (kbd "<tab>") 'helm-fish-completion)
+  (setq helm-esh-pcomplete-build-source-fn #'helm-fish-completion-make-eshell-source))
+
+;; `fish-completion-mode' must be disabled.
+
+
+(require 'helm-swoop)
+
+(global-set-key (kbd "M-i") 'helm-swoop)
+(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+(global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+
+;; When doing isearch, hand the word over to helm-swoop
+(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+;; Save buffer when helm-multi-swoop-edit complete
+(setq helm-multi-swoop-edit-save t)
+
+;; If this value is t, split window inside the current window
+(setq helm-swoop-split-with-multiple-windows nil)
+
+;; Split direction.  'split-window-vertically or 'split-window-horizontally
+(setq helm-swoop-split-direction 'split-window-vertically)
+
+;; If nil, you can slightly boost invoke speed in exchange for text color
+(setq helm-swoop-speed-or-color nil)
+
+;; Go to the opposite side of line from the end or beginning of line
+(setq helm-swoop-move-to-line-cycle t)
+
+;; Optional face for line numbers
+;; Face name is `helm-swoop-line-number-face`
+(setq helm-swoop-use-line t)
+
+;; If you prefer fuzzy matching
+(setq helm-swoop-use-fuzzy-match t)
+
+;; If you would like to use migemo, enable helm's migemo feature
+;;(helm-migemo-mode 1)
+
 
 (helm-mode 1)

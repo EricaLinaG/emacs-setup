@@ -1,4 +1,6 @@
-;;;
+;;; package --- Summary
+;;; Commentary:
+;;; Code
 ;;;
 ;;; bytecompiledir.el
 ;;;
