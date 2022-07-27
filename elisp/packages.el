@@ -5,18 +5,24 @@
 
 (defvar mypackages '(golden-ratio
                      projectile
+                     find-file-in-project
 
                      ;; Multi-language support
                      google-translate
                      langtool
+                     mw-thesaurus
+                     powerthesaurus
+
+                     restclient
+                     restclient-helm
 
                      ;;navigation
-		     ace-jump-mode ace-window frog-jump-buffer
-
+		     ace-jump-mode ace-window frog-jump-buffer ace-jump-buffer
                      ;; basic tools
                      which-key
                      el-get
                      gited
+                     session
 
                      ;; Choose: ido/smex or ivy/swiper/counsel and/or helm.
                      ;; ido/smex and helm are known to play nice. See helm doc.
@@ -34,6 +40,7 @@
                      ;;ido ido-flx ido-imenu
 		     smex
                      ;;ivy swiper counsel
+                     multi-term
 
 
                      ;; helm - an experiment in progess...
@@ -44,6 +51,8 @@
                      helm-descbinds
                      helm-swoop
                      helm-org
+                     helm-cider
+                     cljr-helm
 
                      helm-ag
                      helm-sly
@@ -72,14 +81,13 @@
                      evil
                      evil-nerd-commenter
                      evil-leader
-                     evil-org
                      evil-mu4e
 
                      ;; Parentheses.
                      evil-surround
                      highlight-parentheses
-                     paredit evil-paredit
-                     ;; smartparens evil-smartparens evil-cleverparens ;; - finicky setup.
+                     ;; paredit evil-paredit
+                     smartparens evil-smartparens evil-cleverparens
                      ;; lispy lispyville ;; -- not a fan.
 		     rainbow-mode
                      mic-paren
@@ -98,8 +106,8 @@
                      flycheck-pos-tip
                      aggressive-indent
 
-                     ;; Silver Surfer, grep, fuzzy, ctags.
-                     ag wgrep wgrep-ag fuzzy-match ctags-update
+                     ;; Silver Surfer, grep, ctags.
+                     ag wgrep wgrep-ag ctags-update
 
 
                      ;; clojure -- need to rexamine this. lots of newer stuff.
@@ -107,9 +115,16 @@
                      cider-eval-sexp-fu
                      clojure-mode eval-sexp-fu clojure-mode-extra-font-locking ;popup
                      uuid rainbow-delimiters flycheck-clojure
+                     cider-hydra
+                     flycheck-clj-kondo
+                     4clojure
 
                      ;; clojure script
                      cljsbuild-mode smartscan
+
+                     lsp-mode
+                     lsp-treemacs
+                     lsp-ui
 
                      lua-mode
                      company-lua
@@ -130,10 +145,10 @@
 
                      ;;haskell
                      haskell-mode
-                     ghc
+                     ;;ghc
                      haskell-snippets
                      dante ;; GHCi
-                     helm-ghc
+                     ;;helm-ghc
                      flycheck-haskell
 
                      ;;scheme/common lisp
@@ -143,16 +158,21 @@
 
                      ;;Python
                      elpy
-                     pyenv-mode nose ein
+                     pyenv-mode ein
                      python-docstring
                      py-autopep8
                      py-yapf pydoc
+                     python-black
 
                      ;;org mode.
                      org
                      org-babel-eval-in-repl
                      org-bullets
                      visual-fill-column
+                     org-cliplink
+                     evil-org
+                     org-drill
+                     org-drill-table
 
                      ;;slack - hasn't worked very well so far..
                      slack
@@ -177,17 +197,17 @@
                      doom-themes
                      monokai-theme monokai-alt-theme obsidian-theme atom-dark-theme
                      bubbleberry-theme atom-one-dark-theme
-		     ujelly-theme twilight-theme tronesque-theme tron-theme
+		     ujelly-theme twilight-theme
 		     tango-2-theme tango-plus-theme tangotango-theme zenburn-theme
 		     waher-theme underwater-theme toxi-theme sublime-themes
-		     subatomic-theme sunny-day-theme subatomic256-theme steady-theme
+		     subatomic-theme sunny-day-theme subatomic256-theme
                      soft-stone-theme soft-morning-theme purple-haze-theme
 		     noctilux-theme naquadah-theme leuven-theme lavender-theme
-		     light-soap-theme jujube-theme ir-black-theme inkpot-theme heroku-theme
+		     light-soap-theme ir-black-theme inkpot-theme heroku-theme
 		     github-theme gandalf-theme flatland-theme firecode-theme
 		     flatui-theme espresso-theme django-theme darkburn-theme darkmine-theme
-		     darcula-theme oldlace-theme deep-thought-theme cyberpunk-theme clues-theme
-		     busybee-theme boron-theme bliss-theme assemblage-theme
+		     darcula-theme oldlace-theme cyberpunk-theme clues-theme
+		     busybee-theme boron-theme bliss-theme
 		     ample-zen-theme ample-theme lush-theme smyx-theme gotham-theme
 		     solarized-theme dark-krystal-theme))
 
@@ -206,9 +226,9 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 ;;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
 (package-initialize)
 (when (not package-archive-contents)

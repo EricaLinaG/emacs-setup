@@ -19,7 +19,10 @@
 (global-set-key "\C-ct" 'google-translate-smooth-translate)
 (setq google-translate-translation-directions-alist
       '(("fr" . "en") ("en" . "fr")
+        ("en" . "it") ("it" . "en")
+        ("fr" . "it") ("it" . "fr")
         ("en" . "es") ("es" . "en")
+        ("it" . "es") ("es" . "it")
         ("ps" . "en") ("en" . "ps")) )
 
 (setq google-translate-preferable-input-methods-alist '((nil . ("en"))

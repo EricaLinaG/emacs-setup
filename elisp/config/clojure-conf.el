@@ -100,10 +100,6 @@
           (lambda ()
             (setq buffer-save-without-query t)))
 
-;;command to align let statements
-;;To use: M-x align-cljlet
-(require 'align-cljlet)
-
 ;;Treat hyphens as a word character when transposing word
 (defvar clojure-mode-with-hyphens-as-word-sep-syntax-table
   (let ((st (make-syntax-table clojure-mode-syntax-table)))
@@ -127,6 +123,7 @@
 
 ;; Pull in the awesome clj-refactor lib by magnars
 (require 'clj-refactor)
+(require 'flycheck-clj-kondo)
 (add-hook 'clojure-mode-hook (lambda ()
                                (clj-refactor-mode 1)
                                (cljr-add-keybindings-with-prefix "C-c C-m")))

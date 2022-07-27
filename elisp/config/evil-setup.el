@@ -84,8 +84,9 @@
 (evil-ex-define-cmd "wq" 'my-evil-save-and-close)
 (define-key evil-normal-state-map "ZZ" 'my-evil-save-and-close)
 
-(define-key evil-normal-state-map (kbd  "SPC") 'evil-big-down)
-(define-key evil-normal-state-map (kbd "DEL") 'evil-big-up)
+;; very annoying. theoretically a nice way to page up and down.
+;; (define-key evil-normal-state-map (kbd  "SPC") 'evil-big-down)
+;; (define-key evil-normal-state-map (kbd "DEL") 'evil-big-up)
 
 ;; Make HJKL keys work in special buffers
 (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs

@@ -11,6 +11,7 @@
 (require 'clj-refactor)
 (require 'git-frame)
 (require 'helm)
+(require 'cider-hydra)
 
 ;; (require 'google-translate)
 ;; (require 'ispell)
@@ -51,19 +52,56 @@
   (let (cider-sub-map)
     (define-prefix-command 'cider-sub-map)
     (define-key cider-sub-map (kbd "n") #'cider-browse-ns)
-    (define-key cider-sub-map (kbd "N") #'cider-browse-ns-all)
+    ;;(define-key cider-sub-map (kbd "N") #'cider-browse-ns-all)
+    (define-key cider-sub-map (kbd "N") #'cider-set-buffer-ns)
+    (define-key cider-sub-map (kbd "l") #'cider-load-file)
+    (define-key cider-sub-map (kbd "L") #'cider-load-all-files)
     (define-key cider-sub-map (kbd "u") #'cider-undef)
     (define-key cider-sub-map (kbd "i") #'cider-inspect)
-    (define-key cider-sub-map (kbd "r") #'cider-ns-refresh)
+    (define-key cider-sub-map (kbd "n") #'cider-ns-refresh)
     (define-key cider-sub-map (kbd "R") #'cider-restart)
     (define-key cider-sub-map (kbd "c") #'cider-connect)
     (define-key cider-sub-map (kbd "j") #'cider-jack-in)
     (define-key cider-sub-map (kbd "q") #'cider-quit)
     (define-key cider-sub-map (kbd "v") #'cider-find-var)
-    (define-key cider-sub-map (kbd "t") #'cider-toggle-trace-var)
+    (define-key cider-sub-map (kbd "V") #'cider-toggle-trace-var)
     (define-key cider-sub-map (kbd "f") #'cb-next-cider-window) ;; f=focus.
-    (define-key cider-sub-map (kbd "e") #'cider-jump-to-compilation-error) ;;
+    (define-key cider-sub-map (kbd "E") #'cider-jump-to-compilation-error) ;;
+
+    (define-key cider-sub-map (kbd "d") #'cider-hydra-doc/body)
+    (define-key cider-sub-map (kbd "e") #'cider-hydra-eval/body)
+    (define-key cider-sub-map (kbd "t") #'cider-hydra-test/body)
+    (define-key cider-sub-map (kbd "r") #'cider-hydra-repl/body)
+    (define-key cider-sub-map (kbd "C") #'hydra-cljr-help-menu/body)
     cider-sub-map))
+
+(defvar hydra-sub-map
+  (let (hydra-sub-map)
+    (define-prefix-command 'hydra-sub-map)
+    (define-key hydra-sub-map (kbd "b") #'hydra-buffer-menu/body)
+    (define-key hydra-sub-map (kbd "z") #'hydra-zoom/body)
+    (define-key hydra-sub-map (kbd "d") #'hydra-describe/body)
+    (define-key hydra-sub-map (kbd "c") #'hydra-cljr-help-menu/body)
+    (define-key hydra-sub-map (kbd "u") #'hydra-eaf/body)
+
+    ;; (define-key hydra-sub-map (kbd "w") #'hydra-winmove/body)
+    (define-key hydra-sub-map (kbd "w") #'hydra-window/body)
+    (define-key hydra-sub-map (kbd "m") #'dh-hydra-markdown-mode/body)
+    (define-key hydra-sub-map (kbd "p") #'hydra-projectile/body)
+    (define-key hydra-sub-map (kbd "f") #'hydra-flycheck/body)
+    (define-key hydra-sub-map (kbd "g") #'hydra-git-gutter/body)
+    (define-key hydra-sub-map (kbd "G") #'hydra-goto/body)
+    (define-key hydra-sub-map (kbd "h") #'hydra-hs/body)
+    (define-key hydra-sub-map (kbd "e") #'hydra-ediff/body)
+    (define-key hydra-sub-map (kbd "o") #'hydra-org/body)
+    (define-key hydra-sub-map (kbd "C") #'hydra-org-clock/body)
+    (define-key hydra-sub-map (kbd "a") #'hydra-org-agenda/body)
+    (define-key hydra-sub-map (kbd "A") #'hydra-org-agenda-view/body)
+    (define-key hydra-sub-map (kbd "M") #'hydra-mu4e-headers/body)
+    (define-key hydra-sub-map (kbd "l") #'hydra-language/body)
+    (define-key hydra-sub-map (kbd "L") #'hydra-lsp/body)
+    (define-key hydra-sub-map (kbd "H") #'hydra-helm-like-unite/body)
+    hydra-sub-map))
 
 (defvar buffer-sub-map
   (let (buffer-sub-map)
@@ -215,12 +253,14 @@
 
 
   ;;; Finding
-  "t" 'find-tag-without-ns  ;; ctags
+  "t" 'hydra-window/body
+  "T" 'find-tag-without-ns  ;; ctags
   "v" 'cider-find-var
   "a" 'helm-ag
   "s" 'evil-ace-jump-word-mode  ;;  ace jump search
 
 
+  "h" 'hydra-sub-map
   "G" 'golden-ratio-mode
   "g" 'magit-other-frame  ;; magit is git.
   "i" 'helm-semantic-or-imenu
@@ -229,13 +269,15 @@
   "f" 'helm-find-files
   ;;"O" 'ido-find-file-other-window
 
-  "o" 'projectile-switch-to-buffer-other-window
+  "o" 'hydra-org/body
+  "P" 'eaf-py-proxy-yank_text
   "p" 'helm-projectile
   "B" 'ibuffer
   "b" 'helm-buffers-list
   "m" 'helm-man-woman
 
   "x" 'smex  ;; M-x.
+  "K" 'delete-frame
   "k" 'kill-this-buffer
   "q" 'kill-this-buffer
 

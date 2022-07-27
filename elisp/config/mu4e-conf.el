@@ -13,26 +13,13 @@
 ;; default
 ;; (setq mu4e-maildir "~/.mail")
 
+(setq shr-color-visible-luminance-min 80)
+(setq gnus-unbuttonized-mime-types nil)
 
 ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
 (setq mu4e-sent-messages-behavior 'delete)
 (setq mu4e-attachment-dir  "~/Downloads")
 
-;; Use eww for rendering html mail.
-(defun my-render-html-message ()
-  (let ((dom (libxml-parse-html-region (point-min) (point-max))))
-    (erase-buffer)
-    (shr-insert-document dom)
-    (goto-char (point-min))))
-
-(setq mu4e-html2text-command 'my-render-html-message)
-;;(setq mu4e-html2text-command "/usr/local/bin/w3m -T text/html")
-
-;; view the current message in your default browser.
-(add-to-list 'mu4e-view-actions
-             '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-
-;; allow for updating mail using 'U' in the main view:
 (setq
  mu4e-get-mail-command "mbsync -a"  ;; or fetchmail, or ...
  mu4e-update-interval 300)          ;; update every 5 minutes
@@ -42,9 +29,13 @@
 ;; don't keep message buffers around
 (setq message-kill-buffer-on-exit t)
 ;; enable inline images
-(setq mu4e-view-show-images t)
+;; Try to show images
+(setq mu4e-view-show-images t
+      mu4e-show-images t
+      mu4e-view-image-max-width 800)
 (setq mu4e-view-show-addresses t)
 (setq mu4e-use-fancy-chars t)
+
 ;; use imagemagick, if available
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
@@ -90,7 +81,7 @@
 
 (setq mu4e-maildir-shortcuts
       '(("/e.a.gebhart/inbox" . ?e)
-        ("/ericYeti/inbox" . ?y)
+        ;("/ericYeti/inbox" . ?y)
         ("/tangobreath/inbox" . ?t)))
 
 ;; ;;these are the defaults.
@@ -263,6 +254,7 @@
 ;;This function then needs to be added to mu4e-compose-pre-hook:
 (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
 
+(setq mu4e-compose-format-flowed t)
 
 ;; set `mu4e-context-policy` and `mu4e-compose-policy` to tweak when mu4e should
 ;; guess or ask the correct context, e.g.

@@ -8,11 +8,20 @@
 (require 'git-frame)
 (require 'magit-mode)
 
+;; shift arrows for windmove
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
+;; turn off windmove to get S-arrows back.
+;;(windmove-mode -1)
+
 ;; force magit into a new temporary frame so it doesn't mess with my
 ;; current frame.
 (global-set-key (kbd "C-c g") 'magit-other-frame)
 (define-key magit-mode-map (kbd "q") 'delete-frame)
 
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
 
 (global-set-key (kbd "C-*")         'evil-search-word-forward)
 (global-set-key (kbd "C-#")         'evil-search-word-backward)

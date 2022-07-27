@@ -23,7 +23,7 @@
 ;; font settng functions
 (require 'cl-lib)
 
-(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
+(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-32-*-*-*-m-0-iso10646-1")
 
 ;;make fringe bigger
 (if (fboundp 'fringe-mode)

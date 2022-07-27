@@ -14,8 +14,10 @@
 
 ;;; Ispell and Fly Spell.
 
-(dolist (hook '(text-mode-hook))
+(dolist (hook '(text-mode-hook org-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
 
 (dolist (mode '(emacs-lisp-mode-hook
                 inferior-lisp-mode-hook
@@ -27,30 +29,12 @@
             '(lambda ()
                (flyspell-prog-mode))))
 
-
-(defun flyspell-check-next-highlighted-word ()
-  "Custom function to spell check next highlighted word"
-  (interactive)
-  (flyspell-goto-next-error)
-  (ispell-word))
-
 ;;; F8 to check a word, M-F8 to check the next one.
 ;; (global-set-key (kbd "<f8>") 'ispell-word)
 ;; (global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
 
 
-;; The last annoyance is that on Mac OS X the right mouse button does not
-;; seem to trigger [mouse-2], so you cannot right click a word to get a
-;; suggestion. This can be fixed with:
-
-(eval-after-load "flyspell"
-  '(progn
-     (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-     (define-key flyspell-mouse-map [mouse-3] #'undefined)))
-
-
 ;; You can make ispell.el use Hunspell with
-
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
