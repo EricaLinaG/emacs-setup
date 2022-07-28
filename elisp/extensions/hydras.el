@@ -555,7 +555,7 @@ _n_: Navigate           _._: mark position _/_: jump to mark
   ("R" helm-recentf)
   ("n" hydra-navigate/body))
 
-(global-set-key (kbd "s-g") 'goto/body)
+;;(global-set-key (kbd "s-g") 'goto/body)
 
 
 
@@ -685,8 +685,9 @@ _w_ where is something defined
   ("t" describe-theme)
   ("v" describe-variable)
   ("w" where-is))
-(global-set-key (kbd "M-i") nil)
-(global-set-key (kbd "M-i") #'help/hydra/left/describe/body)
+
+;; (global-set-key (kbd "M-i") nil)
+;; (global-set-key (kbd "M-i") #'help/hydra/left/describe/body)
 
 (defun help/parent-mode-display ()
   "Display this buffer's mode hierarchy."
@@ -696,8 +697,9 @@ _w_ where is something defined
 
 ;; https://oremacs.com/2016/04/04/hydra-doc-syntaxhttps://oremacs.com/2016/04/04/hydra-doc-syntax//
 (require 'org-agenda)
-(define-key org-agenda-mode-map
-  "v" 'hydra-org-agenda-view/body)
+
+;; (define-key org-agenda-mode-map
+;;   "v" 'hydra-org-agenda-view/body)
 
 (defun org-agenda-cts ()
   (let ((args (get-text-property

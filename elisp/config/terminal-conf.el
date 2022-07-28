@@ -31,7 +31,7 @@
 
 ;; get copy and paste to work in terminal.
 (add-hook 'term-mode-hook (lambda ()
-                            (define-key term-raw-map (kbd "c-v") 'term-paste)))
+                            (define-key term-raw-map (kbd "C-v") 'term-paste)))
 
 ;; most good themes will set these. This example is stolen from Zenburn.
 ;; ;; term
