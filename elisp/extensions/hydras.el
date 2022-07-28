@@ -751,6 +751,7 @@ _y_: ?y? year       _q_: quit          _L__l__c_: ?l?"
      (org-agenda-redo)))
   ("q" (message "Abort") :exit t))
 
+
 ;; Hydra for org agenda (graciously taken from Spacemacs)
 (defhydra hydra-org-agenda (:pre (setq which-key-inhibit t)
                                  :post (setq which-key-inhibit nil)
@@ -903,7 +904,7 @@ Timer:  _s_ Start  _S_ Stop   _r_ Reset   _p_ Print
 
 (defun blog-on ()
   "Set a blog tag keyword and add an On property timestamp"
-  (org-toggle-tag "blog" on)
+  (org-toggle-tag "blog" "on")
   (org-set-property "on" (format-time-string (org-time-stamp-format t t))))
 
 (defun org-insert-datetime-stamp ()
@@ -930,7 +931,7 @@ Timer:  _s_ Start  _S_ Stop   _r_ Reset   _p_ Print
   ("c" org-capture :exit t)
   ("l" org-capture-goto-last-stored :exit t)
 
-  ("b" blog-on :exit t)
+  ("b" (blog-on) :exit t)
   ("P" org-jekyll-export-blog :exit t)
   ("p" org-jekyll-export-current-entry :exit t)
 
