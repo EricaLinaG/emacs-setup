@@ -896,17 +896,6 @@ Timer:  _s_ Start  _S_ Stop   _r_ Reset   _p_ Print
   ("q" nil "cancel"))
 
 
-;; Extracts subtrees from your org-publish project files that have a :blog:
-;; keyword and an :on: property with a timestamp, and exports them.
-;; M-x org-jekyll-export-blog if you want to export the whole blog
-;; M-x org-jekyll-export-current-entry if you only want to export the
-;; current tree.
-
-(defun blog-on ()
-  "Set a blog tag keyword and add an On property timestamp"
-  (org-toggle-tag "blog" "on")
-  (org-set-property "on" (format-time-string (org-time-stamp-format t t))))
-
 (defun org-insert-datetime-stamp ()
   "Insert a timestamp with time at current point"
   (org-insert-time-stamp (current-time) WITH-HM))
@@ -932,8 +921,8 @@ Timer:  _s_ Start  _S_ Stop   _r_ Reset   _p_ Print
   ("l" org-capture-goto-last-stored :exit t)
 
   ("b" (blog-on) :exit t)
-  ("P" org-jekyll-export-blog :exit t)
-  ("p" org-jekyll-export-current-entry :exit t)
+  ("P" (org-jekyll-export-blog-project) :exit t)
+  ("p" (org-jekyll-export-current-entry-project) :exit t)
 
   ("R" hydra-org-refile/body :exit t)
   ("C" hydra-org-clock/body :exit t)

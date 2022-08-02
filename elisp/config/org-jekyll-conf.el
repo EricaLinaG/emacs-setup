@@ -28,18 +28,50 @@
 (setq org-publish-eg "~/play/eg.com/")
 (setq org-publish-tb "~/play/tb.com/")
 
+(setq org-jekyll-categories
+      '(Meditation
+        Tango
+        Mindfulness
+        Flute
+        QMK
+        Python
+        Clojure
+        Emacs
+        SPR
+        Art
+        Sculpture
+        Music))
+
+(setq org-jekyll-tags
+      '(fressian
+        pail
+        cascalog
+        clojure
+        lisp
+        spr
+        org
+        keyboards
+        keymap
+        mobile
+        stabile
+        sculpture
+        streetArt))
+
+
 (setq org-jekyll-lang-subdirs '(("en" . "publish-blog/blog/")))
+(setq org-jekyll-category nil) ;; set to lang, to do lang specific post folders.
 
 (add-to-list 'org-publish-project-alist
              `("eg-com"
-               :base-directory "~/play/eg.com/"
+               :base-directory "~/play/ericgebhart.github.io/"
                :recursive t
                :base-extension "org"
-               :publishing-directory ,org-publish-eg
+               :publishing-directory "~/play/ericgebhart.github.io/"
+               :blog-publishing-directory "~/play/ericgebhart.github.io/"
                :exclude "^blog\\|^bitacora\\|tb.org"
-               :site-root "https://ericgebhart.com"
+               :site-root "https://ericgebhart.com/"
                :jekyll-sanitize-permalinks t
-               :publishing-function org-html-publish-to-html
+               :publishing-function org-md-publish-to-markdown
                :section-numbers nil
                :headline-levels 4
                :table-of-contents t
@@ -50,7 +82,7 @@
 
 (add-to-list 'org-publish-project-alist
              `("eg-img"
-               :base-directory "~/cjr/jr/"
+               :base-directory "~/play/ericgebhart.github.io/"
                :recursive t
                :exclude "^publish"
                :base-extension "jpg\\|gif\\|png"
@@ -58,17 +90,19 @@
                :publishing-function org-html-publish-attachment))
 
 (add-to-list 'org-publish-project-alist
-             '("tb" :components ("tb-com"
+             '("tb" :components ("eg-com"
+                                 "tb-com"
                                  "eg-img")))
 
 (add-to-list 'org-publish-project-alist
              `("tb-com"
-               :base-directory "~/play/tb.com/"
+               :base-directory "~/play/tangobreath.github.io/"
+               :base-directory "~/play/tangobreath.github.io/"
                :recursive t
                :base-extension "org"
-               :publishing-directory ,org-publish-tb
-               :blog-publishing-directory ,org-publish-tb
-               :site-root "https://tangobreath.com"
+               :publishing-directory "~/play/tangobreath.github.io/"
+               :blog-publishing-directory "~/play/tangobreath.github.io/"
+               :site-root "https://tangobreath.com/"
                :jekyll-sanitize-permalinks t
                :publishing-function org-html-publish-to-html
                :section-numbers nil

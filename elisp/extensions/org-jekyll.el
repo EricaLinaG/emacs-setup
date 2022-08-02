@@ -1,3 +1,6 @@
+;;; Lazily expanded to export markdown Juillet, 2022, Eric Gebhart
+;;;
+;;;
 ;;; org-jekyll.el --- Export jekyll-ready posts form org-mode entries
 ;;;
 ;;; Author: Juan Reyero
@@ -24,7 +27,109 @@
 ;;;
 ;;; Code:
 
-;;(require 'ox-html)
+(require 'ox-html)
+(require 'ox-md)
+(require 'ox-gfm)
+(require 'cl)
+
+
+;; Example Front yaml for a post.
+;; ---
+;; layout: post
+;; title: "Fression, Pail and Cascalog"
+;; description: "Using Fressian with Pails and Cascalog in Clojure."
+;; Date: 2014-01-14 20:58:33
+;; category: clojure
+;; tags: [Fressian, Pail, Cascalog, Clojure, Big data]
+;; ---
+
+(defvar org-jekyll-categories '()
+  "Post category alist for jekyll")
+(defvar org-jekyll-tags '()
+  "Post tags alist for jekyll")
+
+(defun blog-on ()
+  "Set a blog tag keyword and add an On property timestamp,
+   add appropriate properties needed by jekyll. Date, title, description,
+   category and tags."
+  (progn
+    (org-toggle-tag "blog" "on")
+    (org-set-property "on" (format-time-string (org-time-stamp-format t t)))
+    (org-set-property "date" (format-time-string (org-time-stamp-format t t)))
+    (org-set-property "title" (read-string "title: " ))
+    (org-set-property "description" (read-string "description: " ))
+    (org-set-property "category"
+                      (completing-read "category : " org-jekyll-categories
+                                       nil 'confirm nil nil nil))
+    (org-set-property "blogtags"
+                      (replace-regexp-in-string
+                       "\)" "\]"
+                       (replace-regexp-in-string
+                        "\(" "\["
+                        (format "%s"
+                                (completing-read-multiple
+                                 "tags : " org-jekyll-tags
+                                 nil 'confirm nil nil nil)))))))
+
+;; over-ride the default markdown src block function which is worthless like me.
+(defun org-md-example-block (example-block _content info)
+  "Transcode element EXAMPLE-BLOCK as ```lang ...```."
+  (format "```%s\n%s\n```"
+          (org-element-property :language example-block)
+          (org-remove-indentation
+           (org-export-format-code-default example-block info))))
+
+(defun org-jekyll-export-entry (project)
+  "Do the export type that we want according to org-jekyll-export-type.
+If not html then markdown."
+  (if (eq org-jekyll-export-type 'html)
+      (org-jekyll-export-html-entry project)
+    (org-jekyll-export-md-entry project)))
+
+
+(defun org-jekyll-export-current-entry-project ()
+  "export post entry with a prompt to determine the project"
+  (let ((project-name
+         (completing-read "project : " (mapcar 'car org-publish-project-alist)
+                          nil 'confirm nil nil nil)))
+    (org-jekyll-export-entry
+     (car (remove-if
+           (lambda (prj) (not (equal (car prj) project-name)))
+           org-publish-project-alist)))))
+
+(defun org-jekyll-export-blog-project ()
+  "export blog with a prompt to determine the project"
+  (let ((project-name
+         (completing-read "project : " (mapcar 'car org-publish-project-alist)
+                          nil 'confirm nil nil nil)))
+    (org-jekyll-export-blog
+     (remove-if
+      (lambda (prj) (not (equal (car prj) project-name)))
+      org-publish-project-alist))))
+
+;; Front yaml for a post.
+;; ---
+;; layout: post
+;; title: "Fression, Pail and Cascalog"
+;; description: "Using Fressian with Pails and Cascalog in Clojure."
+;; Date: 2014-01-14 20:58:33
+;; category: clojure
+;; tags: [Fressian, Pail, Cascalog, Clojure, Big data]
+;; ---
+(org-gfm-export-as-markdown)
+
+;; org-gfm-export-as-markdown
+;; org-md-export-as-markdown
+;; org-html-export-as-html
+(defvar org-jekyll-export-func 'org-gfm-export-as-markdown
+  "Specify which export function to use.")
+
+(setq org-jekyll-export-func 'org-gfm-export-as-markdown)
+
+(defvar org-jekyll-export-type 'markdown
+  "Specify which type of export, html or markdown.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar org-jekyll-category nil
   "Specify a property which, if defined in the entry, is used as
@@ -124,7 +229,80 @@ language.")
                                        (replace-regexp-in-string " +" "-" str)))
     str))
 
-(defun org-jekyll-export-entry (project)
+
+(defun org-jekyll-export-md-entry (project)
+  "Export an org entry PROJECT to markdown."
+  (let* ((props (org-entry-properties nil 'standard))
+         (time (cdr (or (assoc "on" props)
+                        (assoc "ON" props))))
+         (lang (cdr (or (assoc "lang" props)
+                        (assoc "LANG" props))))
+         (category (if org-jekyll-category
+                       (cdr (assoc org-jekyll-category props))
+                     nil))
+         (yaml-front-matter (copy-alist props)))
+    (unless (assoc "layout" yaml-front-matter)
+      (push '("layout" . "post") yaml-front-matter))
+    (when time
+      (let* ((heading (org-get-heading t))
+             (title (replace-regexp-in-string "[:=\(\)\?]" ""
+                                              (replace-regexp-in-string
+                                               "[ \t]" "-" heading)))
+             (str-time (and (string-match "\\([[:digit:]\-]+\\) " time)
+                            (match-string 1 time)))
+             (to-file (format "%s-%s.md" str-time
+                              (org-jekyll-sanitize-string title project)))
+             (org-buffer (current-buffer))
+             (yaml-front-matter (cons (cons "title" heading)
+                                      yaml-front-matter))
+             html)
+        (org-narrow-to-subtree)
+        (let ((level (- (org-reduced-level (org-outline-level)) 1))
+              (top-level org-html-toplevel-hlevel)
+              (contents (buffer-substring (point-min) (point-max)))
+              (site-root (org-jekyll-site-root project)))
+          ;; Without the promotion the header with which the headline
+          ;; is exported depends on the level.  With the promotion it
+          ;; fails when the entry is not visible (ie, within a folded
+          ;; entry).
+          (dotimes (n level nil) (org-promote-subtree))
+          (setq output
+                (replace-regexp-in-string
+                 (format "<h%d id=\"sec-1\">\\(.+\\)</h%d>"
+                         top-level top-level)
+                 (format
+                  "<h%d id=\"sec-1\"><a href=\"%s{{ page.url }}\">\\1</a></h%d>"
+                  top-level site-root top-level)
+                 (with-current-buffer
+                     (org-gfm-export-as-markdown)
+                   (buffer-string))))
+          (set-buffer org-buffer)
+          (delete-region (point-min) (point-max))
+          (insert contents)
+          (save-buffer))
+        (widen)
+        (with-temp-file (ensure-directories-exist
+                         (expand-file-name
+                          to-file (org-jekyll-publish-dir project category)))
+          (when yaml-front-matter
+            (insert "---\n")
+            (mapc (lambda (pair)
+                    (insert
+                     (format "%s: %s\n"
+                             (replace-regexp-in-string "blogtags" "tags"
+                                                       (car pair))
+                             (cdr pair))))
+                  yaml-front-matter)
+            (if (and org-jekyll-localize-dir lang)
+                (mapc (lambda (line)
+                        (insert (format "%s\n" line)))
+                      (org-jekyll-slurp-yaml (concat org-jekyll-localize-dir
+                                                     lang ".yml"))))
+            (insert "---\n\n"))
+          (insert output))))))
+
+
+(defun org-jekyll-export-html-entry (project)
   (let* ((props (org-entry-properties nil 'standard))
          (time (cdr (or (assoc "on" props)
                         (assoc "ON" props))))
@@ -169,7 +347,7 @@ language.")
                  (with-current-buffer
                      (org-html-export-as-html nil t t t
                                               '(:tags nil
-                                                :table-of-contents nil))
+                                                      :table-of-contents nil))
                    (buffer-string))))
           (set-buffer org-buffer)
           (delete-region (point-min) (point-max))
