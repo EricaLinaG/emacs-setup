@@ -1,5 +1,6 @@
 (require 'ox-publish)
 (require 'org-jekyll)
+(require 'ox-gfm)
 
 ;; Export jekyll blog posts from org-mode
 ;; Extracts subtrees from your org-publish project files that have a :blog:
@@ -60,6 +61,8 @@
 
 (setq org-jekyll-lang-subdirs '(("en" . "publish-blog/blog/")))
 (setq org-jekyll-category nil) ;; set to lang, to do lang specific post folders.
+
+(setq org-jekyll-md-export-func 'org-gfm-export-as-markdown)
 
 (add-to-list 'org-publish-project-alist
              `("eg-com"
