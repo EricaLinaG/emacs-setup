@@ -484,28 +484,28 @@ Frames: _f_rame new  _df_ delete
                                         ;("m" headlong-bookmark-jump)
   )
 
-(require 'eaf)
-(require 'eaf-browser)
-(require 'eaf-pdf-viewer)
-(require 'eaf-markdown-previewer)
+;; (require 'eaf)
+;; (require 'eaf-browser)
+;; (require 'eaf-pdf-viewer)
+;; (require 'eaf-markdown-previewer)
 
 
 
-(defhydra hydra-eaf (:color teal)
-  "
-Application Framework
-             Browser     Buffer    PDF    Anything
-------------------------------------------------------
-Open:        _u_:rl       _b_:uffer          _o_:pen
-At point:    _U_:rl
-W/history:   _h_:istory              _p_:df
-"
-  ("o"  eaf-open)
-  ("b"  eaf-open-this-buffer)
-  ("u"  eaf-open-browser)
-  ("U"  eaf-open-url-at-point)
-  ("h"  eaf-open-browser-with-history)
-  ("p"  eaf-open-pdf-from-history))
+;; (defhydra hydra-eaf (:color teal)
+;;   "
+;; Application Framework
+;;              Browser     Buffer    PDF    Anything
+;; ------------------------------------------------------
+;; Open:        _u_:rl       _b_:uffer          _o_:pen
+;; At point:    _U_:rl
+;; W/history:   _h_:istory              _p_:df
+;; "
+;;   ("o"  eaf-open)
+;;   ("b"  eaf-open-this-buffer)
+;;   ("u"  eaf-open-browser)
+;;   ("U"  eaf-open-url-at-point)
+;;   ("h"  eaf-open-browser-with-history)
+;;   ("p"  eaf-open-pdf-from-history))
 
 
 (defhydra hydra-goto (:color blue :hint nil)
