@@ -6,6 +6,7 @@
 (defvar mypackages '(golden-ratio
                      projectile
                      find-file-in-project
+                     dashboard
 
                      ;; Multi-language support
                      google-translate
@@ -205,7 +206,7 @@
 		     noctilux-theme naquadah-theme leuven-theme lavender-theme
 		     light-soap-theme ir-black-theme inkpot-theme heroku-theme
 		     github-theme gandalf-theme flatland-theme firecode-theme
-		     flatui-theme espresso-theme django-theme darkburn-theme darkmine-theme
+		     flatui-theme espresso-theme django-theme darkmine-theme
 		     darcula-theme oldlace-theme cyberpunk-theme clues-theme
 		     busybee-theme boron-theme bliss-theme
 		     ample-zen-theme ample-theme lush-theme smyx-theme gotham-theme
