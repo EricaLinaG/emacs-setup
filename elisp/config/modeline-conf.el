@@ -11,6 +11,7 @@
 
 ;; Or doom modeline modeline
 
+(require 'all-the-icons)
 (require 'doom-modeline)
 (doom-modeline-mode 1)
 

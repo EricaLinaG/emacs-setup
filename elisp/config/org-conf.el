@@ -396,6 +396,10 @@
          "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
 
         ("t" "Tasks / Projects")
+        (("tm" "todo" entry (file+headline "~/org/todo.org" "Tasks")
+          "* TODO [#A] %?
+           SCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))
+           %a"))
         ("ti" "Inbox" entry (file+olp "~/org/projects.org" "Inbox")
          "* TODO %^{Description}
           %?
