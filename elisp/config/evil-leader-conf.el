@@ -82,7 +82,7 @@
     (define-key hydra-sub-map (kbd "z") #'hydra-zoom/body)
     (define-key hydra-sub-map (kbd "d") #'hydra-describe/body)
     (define-key hydra-sub-map (kbd "c") #'hydra-cljr-help-menu/body)
-    (define-key hydra-sub-map (kbd "u") #'hydra-eaf/body)
+    ;; (define-key hydra-sub-map (kbd "u") #'hydra-eaf/body)
 
     ;; (define-key hydra-sub-map (kbd "w") #'hydra-winmove/body)
     (define-key hydra-sub-map (kbd "w") #'hydra-window/body)

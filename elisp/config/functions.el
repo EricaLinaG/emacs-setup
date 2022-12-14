@@ -22,11 +22,11 @@
   ;;(cb-get-shell)
   )
 
-(require 'eaf-browser)
-(defun eaf-open-url (url)
-  "Non interactive way to open a browser url in eaf-browser.
-   Wraps urls with https:// as needed."
-  (eaf-open (eaf-wrap-url url) "browser"))
+;; (require 'eaf-browser)
+;; (defun eaf-open-url (url)
+;;   "Non interactive way to open a browser url in eaf-browser.
+;;    Wraps urls with https:// as needed."
+;;   (eaf-open (eaf-wrap-url url) "browser"))
 
 (defun assume-new-is-modified ()
   (when (not (file-exists-p (buffer-file-name)))

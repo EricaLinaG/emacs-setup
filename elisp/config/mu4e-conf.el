@@ -12,6 +12,11 @@
 
 ;; default
 ;; (setq mu4e-maildir "~/.mail")
+;;store org-mode links to messages
+
+(require 'mu4e-org)
+;;store link to message if in header view, not to header query
+(setq org-mu4e-link-query-in-headers-mode nil)
 
 (setq shr-color-visible-luminance-min 80)
 (setq gnus-unbuttonized-mime-types nil)
@@ -50,7 +55,7 @@
 (setq
  send-mail-function 'smtpmail-send-it
  message-send-mail-function 'smtpmail-send-it
- user-mail-address "e.a.gebhart@gmail.com"
+ user-mail-address "ericalinagebhart@gmail.com"
  smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
  smtpmail-auth-credentials (expand-file-name "~/.authinfo")
  smtpmail-default-smtp-server "smtp.gmail.com"
@@ -80,9 +85,9 @@
 ;; the 'All Mail' folder by pressing ``ma''.
 
 (setq mu4e-maildir-shortcuts
-      '(("/e.a.gebhart/inbox" . ?e)
-        ;("/ericYeti/inbox" . ?y)
-        ("/tangobreath/inbox" . ?t)))
+      '(("/ericalinagebhart/inbox" . ?e)
+        ;;("/ConciousTango/inbox" . ?y)
+        ))
 
 ;; ;;these are the defaults.
 ;; (defvar mu4e-bookmarks
@@ -136,10 +141,10 @@
 
 
 ;;; setup the first account for startup.
-(setq mu4e-sent-folder "/eric/sent"
-      mu4e-trash-folder "/eric/trash"
-      mu4e-drafts-folder "/eric/drafts"
-      user-mail-address "e.a.gebhart@gmail.com"
+(setq mu4e-sent-folder "/erica/sent"
+      mu4e-trash-folder "/erica/trash"
+      mu4e-drafts-folder "/erica/drafts"
+      user-mail-address "ericalinagebhart@gmail.com"
       ;;smtpmail-default-smtp-server "smtp.gmail.com"
       ;;smtpmail-local-domain "e.a.gebhart@gmail.com"
       ;;smtpmail-smtp-server "smtp.gmail.com"
@@ -154,15 +159,15 @@
 
 (setq my-mu4e-account-alist
       '(
-        ("eric"
-         (mu4e-sent-folder "/eric/sent")
-         (mu4e-drafts-folder "/eric/drafts")
-         (mu4e-trash-folder "/eric/trash")
-         (user-mail-address "e.a.gebhart@gmail.com")
+        ("erica"
+         (mu4e-sent-folder "/erica/sent")
+         (mu4e-drafts-folder "/erica/drafts")
+         (mu4e-trash-folder "/erica/trash")
+         (user-mail-address "ericalinagebhart@gmail.com")
          (smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil)))
          (smtpmail-default-smtp-server "smtp.gmail.com")
          (smtpmail-local-domain "gmail.com")
-         (smtpmail-smtp-user "e.a.gebhart")
+         (smtpmail-smtp-user "ericalinagebhart")
          (smtpmail-smtp-server "smtp.gmail.com")
          (smtpmail-smtp-service 587)
          (smtpmail-debug-info t)
@@ -174,46 +179,48 @@
          ;;(smtpmail-stream-type starttls)
          ;;(smtpmail-smtp-service 25)
          )
-        ("tangobreath"
-         (mu4e-sent-folder "/tangobreath/sent")
-         (mu4e-drafts-folder "/tangobreath/drafts")
-         (mu4e-trash-folder "/tangobreath/trash")
-         (user-mail-address "tangobreath@gmail.com")
-         (smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil)))
-         (smtpmail-default-smtp-server "smtp.gmail.com")
-         (smtpmail-local-domain "gmail.com")
-         (smtpmail-smtp-user "tangobreath")
-         (smtpmail-smtp-server "smtp.gmail.com")
-         (smtpmail-smtp-service 587)
-         (smtpmail-debug-info t)
-         (starttls-extra-arguments nil)
-         (starttls-gnutls-program "/usr/local/bin/gnutls-cli")
-         (starttls-extra-arguments nil)
-         (starttls-use-gnutls t)
-         ;;(smtpmail-smtp-server "smtp.gmail.com")
-         ;;(smtpmail-stream-type starttls)
-         ;;(smtpmail-smtp-service 25)
-         )
-        ("ericYeti"
-         (mu4e-sent-folder "/ericYeti/sent")
-         (mu4e-drafts-folder "/ericYeti/drafts")
-         (mu4e-trash-folder "/ericYeti/trash")
-         (user-mail-address "eric@yetidata.com")
-         (smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil)))
-         (smtpmail-default-smtp-server "smtp.gmail.com")
-         (smtpmail-local-domain "gmail.com")
-         (smtpmail-smtp-user "eric@yetidata.com")
-         (smtpmail-smtp-server "smtp.gmail.com")
-         (smtpmail-smtp-service 587)
-         (smtpmail-debug-info t)
-         (starttls-extra-arguments nil)
-         (starttls-gnutls-program "/usr/local/bin/gnutls-cli")
-         (starttls-extra-arguments nil)
-         (starttls-use-gnutls t)
-         ;;(smtpmail-smtp-server "smtp.gmail.com")
-         ;;(smtpmail-stream-type starttls)
-         ;;(smtpmail-smtp-service 25)
-         )
+
+        ;; ("tangobreath"
+        ;;  (mu4e-sent-folder "/tangobreath/sent")
+        ;;  (mu4e-drafts-folder "/tangobreath/drafts")
+        ;;  (mu4e-trash-folder "/tangobreath/trash")
+        ;;  (user-mail-address "tangobreath@gmail.com")
+        ;;  (smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil)))
+        ;;  (smtpmail-default-smtp-server "smtp.gmail.com")
+        ;;  (smtpmail-local-domain "gmail.com")
+        ;;  (smtpmail-smtp-user "tangobreath")
+        ;;  (smtpmail-smtp-server "smtp.gmail.com")
+        ;;  (smtpmail-smtp-service 587)
+        ;;  (smtpmail-debug-info t)
+        ;;  (starttls-extra-arguments nil)
+        ;;  (starttls-gnutls-program "/usr/local/bin/gnutls-cli")
+        ;;  (starttls-extra-arguments nil)
+        ;;  (starttls-use-gnutls t)
+        ;;  ;;(smtpmail-smtp-server "smtp.gmail.com")
+        ;;  ;;(smtpmail-stream-type starttls)
+        ;;  ;;(smtpmail-smtp-service 25)
+        ;;  )
+        ;; ("ericYeti"
+        ;;  (mu4e-sent-folder "/ericYeti/sent")
+        ;;  (mu4e-drafts-folder "/ericYeti/drafts")
+        ;;  (mu4e-trash-folder "/ericYeti/trash")
+        ;;  (user-mail-address "eric@yetidata.com")
+        ;;  (smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil)))
+        ;;  (smtpmail-default-smtp-server "smtp.gmail.com")
+        ;;  (smtpmail-local-domain "gmail.com")
+        ;;  (smtpmail-smtp-user "eric@yetidata.com")
+        ;;  (smtpmail-smtp-server "smtp.gmail.com")
+        ;;  (smtpmail-smtp-service 587)
+        ;;  (smtpmail-debug-info t)
+        ;;  (starttls-extra-arguments nil)
+        ;;  (starttls-gnutls-program "/usr/local/bin/gnutls-cli")
+        ;;  (starttls-extra-arguments nil)
+        ;;  (starttls-use-gnutls t)
+        ;;  ;;(smtpmail-smtp-server "smtp.gmail.com")
+        ;;  ;;(smtpmail-stream-type starttls)
+        ;;  ;;(smtpmail-smtp-service 25)
+        ;;  )
+
         ))
 
 ;; You can put any variable you want in the account lists, just make
