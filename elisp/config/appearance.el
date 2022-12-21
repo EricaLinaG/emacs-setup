@@ -13,6 +13,11 @@
 ;; Line-wrapping
 (set-default 'fill-column 72)
 
+;;(set-frame-parameter (selected-frame) 'alpha '(<active> . <inactive>))
+;;(set-frame-parameter (selected-frame) 'alpha <both>)
+(set-frame-parameter (selected-frame) 'alpha '(75 . 50))
+(add-to-list 'default-frame-alist '(alpha . (75 . 50)))
+
 ;;get rid of clutter, menus, scrollbars, etc.
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
