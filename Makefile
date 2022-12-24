@@ -9,6 +9,6 @@ mu4e:
 
 .PHONY: mbsync
 mbsync:
-	cp mbsyncrc ~/.mbsyncrc
+	ln -s mbsyncrc ~/.mbsyncrc
 
 all: install mu4e mbsync
