@@ -1,7 +1,7 @@
 .PHONY: install
 install:
-	ln -s .emacs $(HOME)/.emacs
-	ln -s elisp $(HOME)/elisp
+	ln -s $(PWD)/.emacs $(HOME)/.emacs
+	ln -s $(PWD)/elisp $(HOME)/elisp
 
 .PHONY: mu4e
 mu4e:
@@ -9,6 +9,6 @@ mu4e:
 
 .PHONY: mbsync
 mbsync:
-	ln -s mbsyncrc ~/.mbsyncrc
+	ln -s $(PWD)/mbsyncrc $(HOME)/.mbsyncrc
 
 all: install mu4e mbsync
