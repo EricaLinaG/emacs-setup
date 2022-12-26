@@ -7,6 +7,16 @@
                      projectile
                      find-file-in-project
                      dashboard
+                     exwm
+                     windower
+
+                     diff-hl ;; has a dired mode.
+                     all-the-icons-dired
+                     diredfl
+                     dired-rsync
+                     fd-dired
+                     ranger
+
 
                      ;; Multi-language support
                      google-translate
