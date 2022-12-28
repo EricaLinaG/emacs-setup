@@ -22,21 +22,22 @@
 ;; so org doesn't step on the S-Arrow keys from windmove.
 (setq org-replace-disputed-keys t)
 
-;; so I don't have to look at a white screen while it
-;; loads everything. I do this first.
+(load "packages") ; make sure all the packages are installed.
+
+;; just so I dont have to look at its default so long.
 (load "appearance")
 (load "themes-init")
 ;; this is a local theme I made. Code is in themes.
 (load-theme 'strange-deeper-blue t)
 (enable-theme 'strange-deeper-blue)
 
-(load "packages") ; make sure all the packages are installed.
-
 ;; load up everything, compiling as needed.
 ;; still the simplest, even though just load could
 ;; work if auto compile was on for loading and saving..
 ;; theoretically, if everything was just right.
 ;; takes the same amount of time either way.
+
+;; conditionally recompile and load these dirs.
 (require 'bytecompiledir)
 (byte-compile-directory "~/elisp/extensions")
 (byte-compile-directory "~/elisp/config")

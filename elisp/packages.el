@@ -11,6 +11,7 @@
                      windower
 
                      diff-hl ;; has a dired mode.
+                     all-the-icons
                      all-the-icons-dired
                      diredfl
                      dired-rsync
