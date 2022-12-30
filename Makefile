@@ -15,8 +15,8 @@ links: mbsync
 	ln -s $(PWD)/elisp $(HOME)/elisp
 
 clean-links:
-     rm $(HOME)/.emacs
-     rm $(HOME)/elisp
-     rm $(HOME)/.mbsyncrc
+	rm $(HOME)/.emacs
+	rm $(HOME)/elisp
+	rm $(HOME)/.mbsyncrc
 
 all: mu4e links
