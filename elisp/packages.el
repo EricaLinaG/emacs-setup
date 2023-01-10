@@ -185,6 +185,7 @@
                      evil-org
                      org-drill
                      org-drill-table
+                     ox-gfm
 
                      ;;slack - hasn't worked very well so far..
                      slack

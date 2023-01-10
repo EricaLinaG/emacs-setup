@@ -1,5 +1,6 @@
 (require 'diredfl)
-(setq diredfl-global-mode 't)
+(diredfl-global-mode)
+;;(setq diredfl-mode 't)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 ;; I have git gutter already.

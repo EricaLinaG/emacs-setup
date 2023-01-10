@@ -30,7 +30,7 @@
   (define-key emacs-lisp-mode-map       [remap completion-at-point] 'helm-lisp-completion-at-point))
 (add-hook 'kill-emacs-hook #'(lambda () (and (file-exists-p "/tmp/helm-cfg.el") (delete-file "/tmp/helm-cfg.el"))))
 (require 'helm)
-(require 'helm-config)
+;;(require 'helm-config)
 
 ;; turn on fuzzy matching
 (setq helm-buffers-fuzzy-matching t

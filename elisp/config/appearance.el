@@ -30,8 +30,8 @@
 (require 'cl-lib)
 
 ;;(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
-(set-frame-font "-*-Iosevka-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
-;; (set-frame-font "Iosevka-16")
+;;(set-frame-font "-*-Iosevka-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
+(set-frame-font "Iosevka term 12")  ; 12 is size, not height. height is more.
 
 ;;make fringe bigger
 (if (fboundp 'fringe-mode)
