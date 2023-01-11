@@ -17,6 +17,7 @@
                      dired-rsync
                      fd-dired
                      ranger
+                     perspective
 
 
                      ;; Multi-language support
