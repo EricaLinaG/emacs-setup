@@ -288,7 +288,7 @@
   "n" 'cb-next-buffer-contextual
   "N" 'cb-next-all-buffer
 
-  "e" 'next-error
+  "e" 'er/expand-region
   "E" 'next-error
 
   "V" 'undo-tree-visualize
