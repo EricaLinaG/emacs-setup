@@ -1,6 +1,7 @@
 (require 'which-key)
 
 (which-key-mode)
+(which-key-posframe-mode)
 
 ;;(which-key-setup-side-window-right)
 ;;(which-key-setup-minibuffer)
@@ -9,7 +10,6 @@
 ;; Additional settings
 
 ;;(setq which-key-popup-type 'minibuffer)
-
 
 ;;(setq which-key-popup-type 'side-window)
 
@@ -32,7 +32,7 @@
 
 ;;(setq which-key-popup-type 'frame)
 ;; max width of which-key frame: number of columns (an integer)
-;;(setq which-key-frame-max-width 60)
+;; (setq which-key-frame-max-width 10)
 
 ;; max height of which-key frame: number of lines (an integer)
-;;(setq which-key-frame-max-height 20)
+(setq which-key-frame-max-height 20)
