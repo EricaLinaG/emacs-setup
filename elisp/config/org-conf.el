@@ -554,6 +554,9 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 
+;; (add-to-list 'org-structure-template-alist
+;; 	     '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+
 ;; Automatically tangle our Emacs.org config file when we save it
 (defun ee/org-babel-tangle-config ()
   (when (string-equal (file-name-directory (buffer-file-name))
