@@ -1,205 +1,415 @@
-;;; package --- Summary
-;;; Commentary: Exwm config.
-;;; Code:
+(require 'exwm)
 
-;; This code was lifted from here.
-;; https://github.com/johanwiden/exwm-setup/blob/master/.emacs.d/config.org
+;; (server-start)
 
-;; Then simplified to be only for exwm and only a config.
+(setq exwm-workspace-number 10)
 
-;; But that code came from:
-;; The code has then been modified, mainly with settings from the
-;; (Ambrevar)[https://gitlab.com/ambrevar/dotfiles/-/blob/master/.emacs.d/lisp/init-exwm.el]
-;; configuration.
+(require 'perspective-exwm)
+(perspective-exwm-mode)
 
-;; EXWM buffer names are changed to be much more human readable.
-;; For example, the buffer for a browser window, will get its name from the
-;; title of the currently selected tab in that window.
+(setq perspective-exwm-override-initial-name
+      '((0 . "misc")
+        (1 . "core")
+        (2 . "browser")
+        (3 . "comms")
+        (4 . "dev")))
 
-;; The EXWM keybindings are all defined as one element sequences. This is
-;; required, except for some special cases such as "C-c C-q". To avoid collisions
-;; with other emacs keybindings the exwm-input-global-keys use the "Super"
-;; modifier key, and the simulation keys use the "Hyper" modifier key.
+;; future keys and hydra
+;; M-x perspective-exwm-cycle-exwm-buffers-forward,
+;; perspective-exwm-cycle-exwm-buffers-backward
 
-;; The key bindings under
+;; Set perspective-exwm-get-exwm-buffer-name
+;; to customize the displayed name, by default it’s exwm-class-name.
 
-;; 'S-s-N': Move window to, and switch to, a certain workspace.
+;; M-x perspective-exwm-switch-perspective
 
-;; Support for resizing windows, using the mouse.
-;; Position the mouse on the divider line between two windows, the mouse pointer
-;; should then change to a double arrow.
-;; Press the left mouse button, and move the mouse.
+;; Select a perspective from the list of all perspectives on all workspaces.
+;; ./img/switch-perspective.png
 
+;; M-x perspective-exwm-copy-to-workspace
+;; Copy the current perspective to another EXWM workspace.
 
-;; pgp entry from emacs.
-;; (setf epg-pinentry-mode 'loopback)
-;; (defun pinentry-emacs (desc prompt ok error)
-;;   (let ((str
-;;          (read-passwd
-;;           (concat
-;;            (replace-regexp-in-string
-;;             "%22" "\""
-;;             (replace-regexp-in-string "%0A" "\n" desc)) prompt ": "))))
-;;     str))
+;; M-x perspective-exwm-move-to-workspace
+;; Move the current perspective to another EXWM workspace.
 
+;; M-x perspective-exwm-copy-to-workspace
+;; Copy the current perspective to another EXWM workspace.
 
-(require 'browse-url)
-(require 'exwm-manage)
-(require 'windower)
+;; M-x perspective-exwm-move-to-workspace
+;; Move the current perspective to another EXWM workspace.
 
-;; Rename buffer to window title.
-(defun ambrevar/exwm-rename-buffer-to-title () (exwm-workspace-rename-buffer exwm-title))
-
-(defun ambrevar/call-process-to-string (program &rest args)
-  "Call PROGRAM with ARGS and return output.
-  See also `process-lines'."
-  ;; Or equivalently:
-  ;; (with-temp-buffer
-  ;;   (apply 'process-file program nil t nil args)
-  ;;   (buffer-string))
-  (with-output-to-string
-    (with-current-buffer standard-output
-      (apply 'process-file program nil t nil args))))
-
-
-(setq browse-url-generic-program
-      (or
-       (executable-find (or (getenv "BROWSER") ""))
-       (when (executable-find "xdg-mime")
-         (let ((desktop-browser (ambrevar/call-process-to-string "xdg-mime" "query" "default" "text/html")))
-           (substring desktop-browser 0 (string-match "\\.desktop" desktop-browser))))
-       (executable-find browse-url-chrome-program)))
-
-
-;; Set the initial workspace number.
-(unless (get 'exwm-workspace-number 'saved-value)
-  (setq exwm-workspace-number 4))
-
-;; Make class name the buffer name
+;; All buffers created in EXWM mode are named "*EXWM*". You may want to change
+;; it in `exwm-update-class-hook' and `exwm-update-title-hook', which are run
+;; when a new window class name or title is available. Here's some advice on
+;; this subject:
+;; + Always use `exwm-workspace-rename-buffer` to avoid naming conflict.
+;; + Only renaming buffer in one hook and avoid it in the other. There's no
+;;   guarantee on the order in which they are run.
+;; + For applications with multiple windows (e.g. GIMP), the class names of all
+;;   windows are probably the same. Using window titles for them makes more
+;;   sense.
+;; + Some application change its title frequently (e.g. browser, terminal).
+;;   Its class name may be more suitable for such case.
+;; In the following example, we use class names for all windows expect for
+;; Java applications and GIMP.
 (add-hook 'exwm-update-class-hook
           (lambda ()
-            (exwm-workspace-rename-buffer exwm-class-name)))
+            (unless (string= "gimp" exwm-instance-name)
+              (exwm-workspace-rename-buffer exwm-class-name))))
+(add-hook 'exwm-update-title-hook
+          (lambda ()
+            (when (or (not exwm-instance-name)
+                      (string= "gimp" exwm-instance-name)
+                      (string= "qutebrowser" exwm-instance-name))
+              (exwm-workspace-rename-buffer exwm-title))))
 
+;; Set input mode to be char for terminals
+(setq exwm-manage-configurations
+      '(((string= "urxvt" exwm-instance-name)
+         char-mode t)
+        ((string= "discord" exwm-instance-name)
+         char-mode t)))
 
-;; Global keybindings. 0-9 bcDfFgGhHijJkKlLmoOQrRwW !@#$%^&*() tab f2 backspace
-(unless (get 'exwm-input-global-keys 'saved-value)
-  (setq exwm-input-global-keys
-        `(
-          ;; (,(kbd "s-b") . exwm-workspace-switch-to-buffer)
-          (,(kbd "s-b") . helm-mini) ;; list and select buffers
-          (,(kbd "s-c") . helm-resume) ;; Continue in latest helm selection buffer
-          (,(kbd "s-G") . helm-locate) ;; locate file, based in Linux locate command
-          (,(kbd "s-g") . helm-do-grep-ag) ;; Grep search in files
-          (,(kbd "s-r") . helm-run-external-command) ;; Start an application, such as google-chrome
-          (,(kbd "s-W") . helm-exwm-switch-browser) ;; Switch to some browser windows
-          (,(kbd "s-m") . (lambda () ;; Toggle display of mode-line and minibuffer, in an EXWM window
-                            (interactive)
-                            (exwm-layout-toggle-mode-line)
-                            (exwm-workspace-toggle-minibuffer)))
-          (,(kbd "s-i") . exwm-input-toggle-keyboard) ;; Toggle between "line-mode" and "char-mode" in an EXWM window
-          ;; 's-r': Reset (to line-mode).
-          (,(kbd "s-R") . exwm-reset) ;; Try to reset EXWM to a sane mode. Panic key
-          ;; Interactively select, and switch to, a workspace. Only works in non EXWM windows.
-          (,(kbd "s-w") . exwm-workspace-switch)
-          ;; 's-a': Launch application.
-          ;; (,(kbd "s-a") . (lambda (command)
-          ;;              (interactive (list (read-shell-command "$ ")))
-          ;;              (start-process-shell-command command nil command)))
-          ;; 's-N': Switch to a certain workspace.
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))
-          ;; 'S-s-N': Move window to, and switch to, a certain workspace.
-          ,@(cl-mapcar (lambda (c n)
-                         `(,(kbd (format "s-%c" c)) .
-                           (lambda ()
-                             (interactive)
-                             (exwm-workspace-move-window ,n)
-                             (exwm-workspace-switch ,n))))
-                       '(?\) ?! ?@ ?# ?$ ?% ?^ ?& ?* ?\()
-                       ;; '(?\= ?! ?\" ?# ?¤ ?% ?& ?/ ?\( ?\))
-                       (number-sequence 0 9))
+;; `exwm-input-set-key' allows you to set a global key binding (available in
+;; any case). Following are a few examples.
+;; + We always need a way to go back to line-mode from char-mode
+(exwm-input-set-key (kbd "s-r") #'exwm-reset)
+;; + Bind a key to switch workspace interactively
+(exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+;; + Bind "s-0" to "s-9" to switch to the corresponding workspace.
+(dotimes (i 10)
+  (exwm-input-set-key (kbd (format "s-%d" i))
+                      `(lambda ()
+                         (interactive)
+                         (exwm-workspace-switch-create ,i))))
+;; + Application launcher ('M-&' also works if the output buffer does not
+;;   bother you). Note that there is no need for processes to be created by
+;;   Emacs.
 
-          ;; Bind "s-<f2>" to "slock", a simple X display locker.
-          (,(kbd "s-<f2>") . (lambda ()
-                               (interactive)
-                               (start-process "" nil "/usr/bin/slock")))
-          ;; (,(kbd "s-f") . find-file)
-          (,(kbd "s-<tab>") . windower-switch-to-last-buffer) ;; Switch to last open buffer in current window
-          (,(kbd "s-o") . windower-toggle-single) ;; Toggle between multiple windows, and a single window
-          (,(kbd "s-O") . windower-toggle-split)  ;; Toggle between vertical and horizontal split. Only works with exactly two windows.
-          (,(kbd "s-H") . windower-swap-left)  ;; Swap current window with the window to the left
-          (,(kbd "s-J") . windower-swap-below) ;; Swap current window with the window below
-          (,(kbd "s-K") . windower-swap-above) ;; Swap current window with the window above
-          (,(kbd "s-L") . windower-swap-right) ;; Swap current window with the window to the right
-          (,(kbd "s-F") . exwm-floating-toggle-floating) ;; Toggle the current window between floating and non-floating states
-          (,(kbd "s-Q") . exwm-layout-toggle-fullscreen) ;; Toggle fullscreen mode, when in an EXWM window.
-          (,(kbd "s-D") . kill-this-buffer)
-          (,(kbd "s-<backspace>") . kill-this-buffer)
-          )))
+;; launchers from daedreth
+(defun exwm-async-run (name)
+  (interactive)
+  (start-process name nil name))
 
+(defun eg/launch-discord ()
+  (interactive)
+  (exwm-async-run "discord"))
 
-;; Line-editing shortcuts: abBcdefFknpqsvwx
-(unless (get 'exwm-input-simulation-keys 'saved-value)
-  (setq exwm-input-simulation-keys
-        `((,(kbd "H-b") . ,(kbd "<left>"))
-          (,(kbd "H-B") . ,(kbd "C-<left>"))
-          (,(kbd "H-f") . ,(kbd "<right>"))
-          (,(kbd "H-F") . ,(kbd "C-<right>"))
-          (,(kbd "H-p") . ,(kbd "<up>"))
-          (,(kbd "H-n") . ,(kbd "<down>"))
-          (,(kbd "H-a") . ,(kbd "<home>"))
-          (,(kbd "H-e") . ,(kbd "<end>"))
-          ;; q and w are convenient if Caps Lock key is Hyper key
-          (,(kbd "H-q") . ,(kbd "<prior>"))
-          (,(kbd "H-w") . ,(kbd "<next>"))
-          (,(kbd "H-d") . ,(kbd "<delete>"))
-          (,(kbd "H-k") . ,(kbd "S-<end> <delete>"))
-          ;; cut/paste.
-          (,(kbd "H-x") . ,(kbd "C-x"))
-          (,(kbd "H-c") . ,(kbd "C-c"))
-          (,(kbd "H-v") . ,(kbd "C-v"))
-          ;; search
-          (,(kbd "H-s") . ,(kbd "C-f"))
-          )))
+(defun eg/launch-browser ()
+  (interactive)
+  (exwm-async-run "qutebrowser"))
 
-;; Default is save-buffers-kill-terminal, but that may kill daemon before its finished
-(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
-(add-hook 'exwm-update-title-hook 'ambrevar/exwm-rename-buffer-to-title)
+(defun eg/lock-screen ()
+  (interactive)
+  (exwm-async-run "slock"))
 
-;; Ensure that EXWM input mode is displayed in mode line
-(add-hook 'exwm-input--input-mode-change-hook
-          'force-mode-line-update)
+(defun eg/shutdown ()
+  (interactive)
+  (start-process "halt" nil "sudo" "halt"))
 
-;; Allow resizing of non-floating windows, with mouse.
-(setq window-divider-default-bottom-width 2
-      window-divider-default-right-width 2)
-(window-divider-mode)
+;; from Olivia5k
+(defun exwm-execute (command)
+  (interactive
+   (list (read-shell-command "$ ")))
+  (start-process-shell-command command nil command))
 
+;; Terminal launcher
+(defun th/ansi-term ()
+  (interactive)
+  (let ((buf (get-buffer "*ansi-term*")))
+    (if buf
+        (switch-to-buffer buf)
+      (ansi-term "/usr/bin/zsh"))))
 
-;; Allow switching to EXWM buffers not belonging to current workspace.
-;; This behaviour takes some getting used to
-;; (setq exwm-layout-show-all-buffers t)
+(exwm-input-set-key (kbd "s-<return>") #'th/eshell-here)
+(exwm-input-set-key (kbd "M-s-<return>") (lambda () (interactive) (th/eshell-here 1)))
+(exwm-input-set-key (kbd "C-M-s-<return>") #'th/goto-terminal)
 
-;; When a buffer list is displayed, we want a separate section for EXWM buffers.
-;; EXWM buffers that do not belong to the current workspace, are listed with an
-;; indent.
-(require 'helm-exwm)
+;; + 'slock' is a simple X display locker provided by suckless tools.
+(exwm-input-set-key (kbd "s-<backspace>") 'lock)
+(defun lock ()
+  (interactive)
+  (start-process "" nil "lock"))
 
-(setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
-(setq helm-exwm-source (helm-exwm-build-source))
-(setq helm-mini-default-sources `(helm-exwm-emacs-buffers-source
-                                  helm-exwm-source
-                                  helm-source-recentf))
+;;;###autoload
+(defun th/golden-split ()
+  "Splits the current window into two, at a golden-ratio like ratio"
+  (interactive)
+  (delete-other-windows)
+  ;; Add one fifth to make it go from 1/2 to 1/3, ish
+  (let* ((width (/ (window-width) 5)))
+    (split-window-right)
+    (other-window 1)
+    (enlarge-window-horizontally width)
+    (set-frame-parameter nil 'th/prohibit-balance t)))
 
-;; When saving emacs desktop, also save Helm find-file-history.
-;; That way we also save dired paths.
+(defun th/browser-golden ()
+  "Splits the current window into a browser at 2/3 of the window"
+  (interactive)
+  (th/golden-split)
+  (th/iosevka 10)
+  (th/goto-browser))
 
-;; not sure what package this is.
-;; (add-to-list 'desktop-globals-to-save 'helm-ff-history)
+(defun th/goto-browser ()
+  "Run or raise a browser in the current frame.
 
-;; Sets up the hooks.  Exwm starts with the first frame if it can.
+If there are multiple, complete for them."
+  (interactive)
+  (let* ((browser-buffers (--map (buffer-name it)
+                                 (--filter (s-prefix? "qutebrowser" (buffer-name it))
+                                  (buffer-list)))))
+    (cond
+     ((= (length browser-buffers) 1)
+      (switch-to-buffer (car browser-buffers)))
+     ((> (length browser-buffers) 1)
+      (switch-to-buffer (switch-to-buffer
+                         (completing-read "Select browser: " browser-buffers))))
+     (t
+      (start-process-shell-command "qutebrowser" nil "qutebrowser")))))
+
+(defun th/goto-terminal ()
+  "Run or raise a terminal in the current frame.
+
+If there are multiple, complete for them."
+  (interactive)
+  (let* ((browser-buffers (--map (buffer-name it)
+                                 (--filter (s-prefix? "urxvt" (buffer-name it))
+                                  (buffer-list)))))
+    (cond
+     ((= (length browser-buffers) 1)
+      (switch-to-buffer (car browser-buffers)))
+     ((> (length browser-buffers) 1)
+      (switch-to-buffer (switch-to-buffer
+                         (completing-read "Select urxvt: " browser-buffers))))
+     (t
+      (start-process-shell-command "urxvt" nil "urxvt")))))
+
+(exwm-input-set-key (kbd "s-h") 'windmove-left)
+(exwm-input-set-key (kbd "s-t") 'windmove-down)
+(exwm-input-set-key (kbd "s-n") 'windmove-up)
+(exwm-input-set-key (kbd "s-s") 'windmove-right)
+(exwm-input-set-key (kbd "s-y") 'transpose-frame)
+
+(exwm-input-set-key (kbd "s-M-h") 'shrink-window-horizontally)
+(exwm-input-set-key (kbd "s-M-t") 'shrink-window)
+(exwm-input-set-key (kbd "s-M-n") 'enlarge-window)
+(exwm-input-set-key (kbd "s-M-s") 'enlarge-window-horizontally)
+
+(exwm-input-set-key (kbd "s-M-C-h") (lambda () (interactive) (shrink-window-horizontally 3)))
+(exwm-input-set-key (kbd "s-M-C-t") (lambda () (interactive) (shrink-window 3)))
+(exwm-input-set-key (kbd "s-M-C-n") (lambda () (interactive) (enlarge-window 3)))
+(exwm-input-set-key (kbd "s-M-C-s") (lambda () (interactive) (enlarge-window-horizontally 3)))
+
+(exwm-input-set-key (kbd "s-b") 'ivy-switch-buffer)
+(exwm-input-set-key (kbd "s-M-b") 'balance-windows)
+(exwm-input-set-key (kbd "s-<tab>") 'th/switch-to-previous-buffer)
+
+(exwm-input-set-key (kbd "s-M-C-n") 'first-error)
+(exwm-input-set-key (kbd "s-M-n") 'next-error)
+(exwm-input-set-key (kbd "s-M-p") 'previous-error)
+
+(exwm-input-set-key (kbd "s-M-b") 'balance-windows)
+
+(exwm-input-set-key (kbd "s-C-a") 'org-build-agenda)
+(exwm-input-set-key (kbd "s-o") 'th/org-hydra/body)
+(exwm-input-set-key (kbd "s-e") 'th/ew/body)
+
+(exwm-input-set-key (kbd "C-s-p") (lambda () (interactive) (start-process-shell-command "ss" nil "ss -s")))
+(exwm-input-set-key (kbd "C-M-s-p") (lambda () (interactive) (start-process-shell-command "ss" nil "ss")))
+
+(exwm-input-set-key (kbd "s-q") #'th/goto-browser)
+(exwm-input-set-key (kbd "C-s-q") #'th/browser-golden)
+(exwm-input-set-key (kbd "C-M-s-q") #'th/golden-split)
+(exwm-input-set-key (kbd "C-s-s") (lambda () (interactive) (exwm-execute "spotify")))
+
+(exwm-input-set-key (kbd "M-s-SPC") 'exwm-execute)
+
+(defun th/switch-screens ()
+  "Switch screen setup."
+  (interactive)
+  (let* ((arg (completing-read "screen mode: " '(laptop work desktop tv))))
+    (cond
+     ((s-equals? arg "laptop")
+      (shell-command "xrandr --output eDP1 --auto")
+      (shell-command "xrandr --output HDMI2 --off"))
+
+     ((s-equals? arg "work")
+      (shell-command "xrandr --output HDMI2 --right-of eDP1 --auto"))
+
+     ((s-equals? arg "desktop")
+      (shell-command "xrandr --output HDMI-0 --off")
+      (shell-command "xrandr --output DVI-I-1 --left-of DVI-D-0"))
+
+     ((s-equals? arg "tv")
+      (shell-command "xrandr --output HDMI-0 --auto")
+      (shell-command "xrandr --output HDMI-0 --right-of DVI-D-0")))
+
+    (shell-command "keyboard-setup")
+    (exwm-randr--refresh)))
+
+(exwm-input-set-key (kbd "s-<prior>") (lambda () (interactive)
+                       (shell-command "keyboard-setup qwerty-a6-us")
+                       (message "a6 loaded")))
+(exwm-input-set-key (kbd "s-<next>") (lambda () (interactive)
+                      (shell-command "keyboard-setup us")
+                      (message "us loaded")))
+
+(defun th/exwm-chrome (url name)
+  "Open a browser app for `url'"
+  (interactive)
+  (start-process "" name "browser-app" url))
+
+(defun th/exwm-terminal (command)
+  "Open a terminal with a dedicated command"
+  (interactive
+   (list (read-string "kitty: ")))
+  (exwm-execute
+   (format "kitty -e %s" command)))
+
+;; Volume control!
+(exwm-input-set-key (kbd "s-x") 'th/toggle-mute)
+
+;; Splits
+(exwm-input-set-key (kbd "s-z") #'th/split-horizontally)
+(exwm-input-set-key (kbd "s-s") #'th/split-vertically)
+
+;; Kill split
+(exwm-input-set-key (kbd "C-s-k") 'delete-window)
+
+(defun th/toggle-mute ()
+  (interactive)
+  (shell-command-to-string "pulsemixer --toggle-mute")
+  (let ((muted (shell-command-to-string "pulsemixer --get-mute")))
+    (message (if (string-equal (s-trim muted) "1") "muted" "not muted"))))
+
+;; The following example demonstrates how to set a key binding only available
+;; in line mode. It's simply done by first push the prefix key to
+;; `exwm-input-prefix-keys' and then add the key sequence to `exwm-mode-map'.
+;; The example shorten 'C-c q' to 'C-q'.
+(push ?\C-q exwm-input-prefix-keys)
+(define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+
+;; The following example demonstrates how to use simulation keys to mimic the
+;; behavior of Emacs. The argument to `exwm-input-set-simulation-keys' is a
+;; list of cons cells (SRC . DEST), where SRC is the key sequence you press and
+;; DEST is what EXWM actually sends to application. Note that SRC must be a key
+;; sequence (of type vector or string), while DEST can also be a single key.
+(exwm-input-set-simulation-keys
+ '(([?\C-b] . left)
+   ([?\C-f] . right)
+   ([?\C-p] . up)
+   ([?\C-n] . down)
+   ([?\C-a] . home)
+   ([?\C-e] . end)
+   ([?\M-v] . prior)
+   ([?\C-v] . next)
+   ([?\C-d] . delete)))
+
+;; You can hide the mode-line of floating X windows by uncommenting the
+;; following lines
+(add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
+(add-hook 'exwm-floating-exit-hook #'exwm-layout-show-mode-line)
+
+;; You can hide the minibuffer and echo area when they're not used, by
+;; uncommenting the following line
+(setq exwm-workspace-minibuffer-position nil)
+
+(defun exwm-randr-dragonisle ()
+  (start-process-shell-command
+   "xrandr" nil "xrandr --output DP-0 --right-of HDMI-0 --auto"))
+
+(defun th/xrandr (&rest commands)
+  (let ((command (format "xrandr --verbose --output %s" (s-join " --output " commands))))
+    (message command)
+    (start-process-shell-command "xrandr" "*xrandr*" command)))
+
+(defun th/exwm-randr-hook ()
+  (cond
+   ((s-equals? (system-name) "dragonisle")
+    (th/xrandr "DP-0 --right-of HDMI-0 --auto"
+               "HDMI-0 --auto"))
+
+   ((s-equals? (system-name) "dragonwing")
+
+    (let ((screens (th/get-connected-screens)))
+      (cond ((= 3 (length screens))
+             ;; If we have three screens connected, that means that the laptop
+             ;; screen is on and the two monitors are attached. Disable the
+             ;; laptop screen and align the other two.
+             (message "Triple screens")
+             (th/xrandr "eDP1 --off"
+                        "HDMI2 --right-of DP1 --auto"
+                        "DP1 --auto")
+             (setq screens '("DP1" "HDMI2")))
+
+            ;; If we have two screens connected, it means we want to
+            ;; show what's going on; mirror the laptop screen to the HDMI
+            ((= 2 (length screens))
+             (message "Two screens; mirroring")
+             (th/xrandr "eDP1 --auto"
+                        "HDMI2 --same-as eDP1 --mode 1920x1080")
+             (setq screens '("eDP1")))
+            ;; Just a laptop screen
+            (t
+             (message "One screen; laptop only")
+             (th/xrandr "eDP1 --auto"
+                        "HDMI2 --off"
+                        "DP1 --off")
+             (setq screens '("eDP1"))))
+
+      (setq th/ew/screens screens)
+      (setq exwm-randr-workspace-output-plist (th/ew/plist screens))))))
+
+(defun th/get-connected-screens ()
+  "Returns a list of the screens xrandr reports as connected"
+  (mapcar
+   (lambda (s)
+     ;; Hehe, ugly, but works since the outputs are always the first
+     ;; thing on every row.
+     (s-replace-regexp " .*" "" s))
+   (s-split
+    "\n"
+    (s-trim (shell-command-to-string
+             "xrandr --query | grep \" connected \"")))))
+
+(require 'exwm-randr)
+(require 'th-exwm-workspace)
+
+(cond
+ ((s-equals? (system-name) "dragonisle")
+  (th/ew/setup
+   (th/get-connected-screens)
+   '("www" "df")
+   #'exwm-randr-dragonisle))
+
+ ((s-equals? (system-name) "dragonwing")
+  (th/ew/setup
+   ;; If we have three screens, just use two of them
+   (let ((screens (th/get-connected-screens)))
+     (if (= 3 (length screens))
+         (cdr screens)
+       screens))
+   '("www" "unom")
+   #'th/exwm-randr-hook
+   )))
+
+(th/ew/setup
+ (th/get-connected-screens)
+ '("www" "df")
+ #'exwm-randr-dragonisle)
+
+;; Whenever the screen refreshes, make sure to reset the keyboard layout
+;; TODO(thiderman): Temporarily disabled since it seems to cause lag
+;; (add-hook 'exwm-randr-refresh-hook
+;;           (lambda ()
+;;             (start-process-shell-command
+;;                "" nil "keyboard-setup")))
+
+(exwm-randr-enable)
+;; Do not forget to enable EXWM. It will start by itself when things are ready.
 (exwm-enable)
+
+(when (not (get-buffer "*redshift*"))
+  (start-process-shell-command "redshift" "*redshift*" "redshift"))
+
+(provide 'exwm-conf)

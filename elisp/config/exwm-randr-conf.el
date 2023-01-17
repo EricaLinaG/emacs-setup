@@ -213,4 +213,8 @@
   )
 
 (add-hook 'exwm-randr-screen-change-hook 'jw/exwm-change-screen-hook)
+
 ;; (exwm-randr-enable)
+
+(provide 'exwm-randr-conf)
+;;; exwm-randr-conf.el ends here
