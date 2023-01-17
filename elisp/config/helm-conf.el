@@ -2,9 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(helm-posframe-enable)
+;; love this. doesn't work with magit. it never gets focus,
+;; and its impossible to get focus in a helm window once it is lost.
+;;(helm-posframe-enable)
 
-(setq helm-posframe-width 110)
+;;(setq helm-posframe-width 110)
+
 (define-key global-map [remap find-file] 'helm-find-files)
 (define-key global-map [remap occur] 'helm-occur)
 (define-key global-map [remap list-buffers] 'helm-buffers-list)
