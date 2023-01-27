@@ -121,7 +121,7 @@
 ;; Record time and note when a task is refiled
 (setq org-log-refile 'note)
 
-(setq org-agenda-files (file-expand-wildcards "~/org/*.org"))
+(setq org-agenda-files (file-expand-wildcards "~/Documents/org/*.org"))
 
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 3))))
 
