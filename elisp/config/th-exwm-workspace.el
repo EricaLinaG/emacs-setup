@@ -13,7 +13,7 @@
   "exwm"
   ("SPC" exwm-execute "exec")
   ("s-SPC" exwm-execute "exec")
-  ("v" (exwm-execute "vivaldi") "vivaldi")
+  ("v" (exwm-execute "qutebrowser") "qutebrowser")
   ("RET" (exwm-execute "urxvt") "terminal")
   ("c" (th/exwm-terminal "ctop") "ctop")
   ("d" (exwm-execute "discord") "discord")
