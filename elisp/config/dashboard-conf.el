@@ -23,8 +23,8 @@
 (require 'projectile)
 (require 'dashboard)
 
-;; replace so that dashboard always starts.  Sometimes i pass evals or files.
-(defun dashboard-startup ()
+;; replace so that dashboard always starts. Sometimes I pass a title, evals or files.
+(defun dashboard-setup-startup-hook ()
   "Setup post initialization hooks.
 If a command line argument is provided, assume a filename and skip displaying
 Dashboard."
@@ -38,6 +38,7 @@ Dashboard."
                                   (goto-char (point-min))
                                   (redisplay)
                                   (run-hooks 'dashboard-after-initialize-hook))))
+
 
 ;;(dashboard-setup-startup-hook)
 (setq dashboard-projects-backend 'projectile)

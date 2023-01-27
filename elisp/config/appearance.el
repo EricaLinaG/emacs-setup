@@ -7,6 +7,24 @@
 (require 'all-the-icons)
 (ansi-color-for-comint-mode-on)
 
+(setq use-dialog-box nil)
+
+;; (require 'mini-frame)
+
+;; make it half as wide as the frame.
+;; (custom-set-variables
+;;  '(mini-frame-show-parameters
+;;    '((top . 10)
+;;      (width . 0.5)
+;;      (left . 0.5))))
+
+;; (mini-frame-mode)
+
+;; posframe for transient popups like magit commands.
+;; hope it works better than all the rest
+(require 'transient-posframe)
+(transient-posframe-mode)
+
 (setq font-lock-maximum-decoration t
       color-theme-is-global t)
 
@@ -30,8 +48,8 @@
 (require 'cl-lib)
 
 ;;(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
-(set-frame-font "-*-Iosevka-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
-;;(set-frame-font "Iosevka term 12")  ; 12 is size, not height. height is more.
+;;(set-frame-font "-*-Iosevka-normal-normal-normal-*-20-*-*-*-m-0-iso10646-1")
+(set-frame-font "Iosevka term 12")  ; 12 is size, not height. height is more.
 
 ;;make fringe bigger
 (if (fboundp 'fringe-mode)
