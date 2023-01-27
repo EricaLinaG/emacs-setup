@@ -1,0 +1,6 @@
+(("default" . ((user-emacs-directory . "~/Emacs/stable/elisp")))
+ ("stable"  . ((user-emacs-directory . "~/Emacs/stable/elisp")))
+ ("dev"     . ((user-emacs-directory . "~/Emacs/dev/elisp")))
+ ("AS"      . ((user-emacs-directory . "~/Arch-Setup/emacs-setup/elisp")))
+ ("doom"    . ((user-emacs-directory . "~/Emacs/doom")))
+ ("space"   . ((user-emacs-directory . "~/Emacs/space"))))
