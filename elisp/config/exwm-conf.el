@@ -95,6 +95,14 @@
   (interactive)
   (exwm-async-run "discord"))
 
+(defun eg/launch-telegram ()
+  (interactive)
+  (exwm-async-run "telegram"))
+
+(defun eg/launch-yacreader ()
+  (interactive)
+  (exwm-async-run "yacreader"))
+
 (defun eg/launch-browser ()
   (interactive)
   (exwm-async-run "qutebrowser"))

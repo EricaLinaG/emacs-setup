@@ -4,28 +4,31 @@
 
 ;; love this. doesn't work with magit. it never gets focus,
 ;; and its impossible to get focus in a helm window once it is lost.
-;;(helm-posframe-enable)
+;; (helm-posframe-enable)
 
 ;;(setq helm-posframe-width 110)
 
-(define-key global-map [remap find-file] 'helm-find-files)
-(define-key global-map [remap occur] 'helm-occur)
-(define-key global-map [remap list-buffers] 'helm-buffers-list)
-(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
-(define-key global-map [remap execute-extended-command] 'helm-M-x)
-(define-key global-map [remap apropos-command] 'helm-apropos)
+;;(setq helm-display-buffer-reuse-frame t)
+;;(setq helm-display-function #'helm-display-buffer-popup-frame)
+
+;;(define-key global-map [remap find-file] 'helm-find-files)
+;;(define-key global-map [remap occur] 'helm-occur)
+;;(define-key global-map [remap list-buffers] 'helm-buffers-list)
+;;(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+;;(define-key global-map [remap execute-extended-command] 'helm-M-x)
+;;(define-key global-map [remap apropos-command] 'helm-apropos)
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
 ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-unset-key (kbd "C-x c"))
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-c h o") 'helm-occur)
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+;;(global-set-key (kbd "C-c h") 'helm-command-prefix)
+;;(global-unset-key (kbd "C-x c"))
+;;(global-set-key (kbd "M-x") 'helm-M-x)
+;;(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+;;(global-set-key (kbd "C-x b") 'helm-mini)
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;;(global-set-key (kbd "C-c h o") 'helm-occur)
+;;(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 
 ;;; from http://tuhdo.github.io/helm-intro.html
 
@@ -149,4 +152,4 @@
 ;;(helm-migemo-mode 1)
 
 
-(helm-mode 1)
+(helm-mode 0)
