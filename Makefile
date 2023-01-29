@@ -41,7 +41,7 @@ remove-dot-emacs:
 # Create a new Chemacs profiles with this repo as OG
 .PHONY: add-og
 add-og:
-        touch .emacs-profiles.el
+	touch .emacs-profiles.el
 	sed 's:FIXME:$(PWD):' emacs-profiles-orig.el > .emacs-profiles.el
 
 # Chemacs goes in emacs.d
@@ -51,17 +51,17 @@ install-chemacs:
 # everyone else goes in emacs home.
 install-doom:
 	sed 's/;;doom//' .emacs-profiles.el > tmp
-        mv tmp .emacs-profiles.el
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
 
 install-spacemacs:
 	sed 's/;;space//' .emacs-profiles.el > tmp
-        mv tmp .emacs-profiles.el
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
 
 install-dev:
 	sed 's/;;dev//' .emacs-profiles.el > tmp
-        mv tmp .emacs-profiles.el
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
 
 install-stable:

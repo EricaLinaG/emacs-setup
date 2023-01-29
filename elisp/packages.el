@@ -12,6 +12,7 @@
                       windower
                       expand-region
                       dmenu
+                      async
 
                       vertico
                       marginalia
