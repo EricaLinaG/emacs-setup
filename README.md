@@ -87,7 +87,7 @@ This is all new as I just added chemacs2 to the mix.
 I use these installs to insure I always have a way to do work if I have
 broken anything.  I do my elisp work in dev.  When dev is working well and 
 everything is pushed I __make update-stable__ to do a `git pull` and bring 
-it up to date.
+it up to date with _origin/master_.
 
 ### Emacs boot choices
 
@@ -135,8 +135,6 @@ simpler than emacs it's self.;
 
 ## What is here.
 
-*I think* This is a pretty straight forward setup. 
-
 There is an _elisp_ directory full of stuff, mostly configurations and
 extensions which I wrote or borrowed from someone else that aren't available
 as packages. Initialization happens in _elisp/init.el_
@@ -144,12 +142,18 @@ as packages. Initialization happens in _elisp/init.el_
 
 ## The big things; 
 
-- Evil-mode (which can be easily switched off in _elisp/setup.el_).
-- Modus themes.
-- Lots of Hydras.
-- Org
-- Mu4e
-- PosFrame
+- [Evil-mode](https://github.com/emacs-evil/evil)(which can be easily switched off in _elisp/init.el_).
+- [Modus themes.](https://github.com/protesilaos/modus-themes)
+- [Lots of Hydras.](https://github.com/abo-abo/hydra)
+- [Org](https://orgmode.org/)
+- [Mu4e](https://www.emacswiki.org/emacs/mu4e)
+- [Vertico](https://github.com/minad/vertico)
+- [PosFrame](https://github.com/tumashu/posframe)
+- [Dashboard](https://github.com/emacs-dashboard/emacs-dashboard)
+- [undo-tree](https://www.emacswiki.org/emacs/UndoTree)
+
+I've considered [multiple cursors](https://github.com/magnars/multiple-cursors.el) 
+but have not yet tried them out.
 
 I program lots of languages, these are the main ones. They may or may not
 have extended configurations from default. 
@@ -215,7 +219,7 @@ when _mu_ is installed with pacman.
 Everything that can be installed as packages is. *The glaring exception is mu4e.*
 see this page about (installing mu/mu-git/mu4e)[https://www.djcbsoftware.nl/code/mu/mu4e/Installation.html#Installation].  There is a make rule that works to get everthing wired up on Arch Linux. YMMV.
 
-## Keymappings
+## Key mappings
 
 I didn't mess with key mappings except for F keys. 
 My <leader> key is currently __,__ but I am looking to change to __SPC__ and also to
@@ -287,7 +291,6 @@ Included along with evil mode are:
 * [evil-nerd-commenter](https://github.com/redguardtoo/evil-nerd-commenter)
 * [evil-surround](https://github.com/timcharper/evil-surround)
 * evil-org
-* undo-tree
  
 CycleBufs
 ==============
