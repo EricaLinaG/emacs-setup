@@ -12,7 +12,7 @@
 
 (setq load-path
       (append (list
-	       "."
+	       "./"
 	       "./themes"
 	       "./extensions"
 	       "./config")

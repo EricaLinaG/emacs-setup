@@ -1,34 +1,37 @@
 
 # My emacs setup. 
 
-Basically, an old school emacs setup that uses packages. 
+An old school emacs setup that uses packages. 
 no _use-package_, just elpa, some config files and some extensions
 outside of elpa.
 
 ## Chemacs
 
 This configuration uses [Chemacs2](https://github.com/plexus/chemacs2) 
-as an _Emacs bootloader_ to create 
+as an _Emacs bootloader_ to allow multiple emacs configurations
+to exist at once.
+
+This repo can do install the following:
 __stable__ and __development__ installs of this emacs configuration. 
-There will also be an entry for this repository, __OG__.
-It will also install [_doom-emacs](https://github.com/doomemacs) and 
-[spacemacs](https://github.com/syl20bnr/spacemacs) if desired.
+__OG__ for this repository, as well as __doom__ for 
+[_doom-emacs](https://github.com/doomemacs), and __space__ for 
+[spacemacs](https://github.com/syl20bnr/spacemacs).
 
 On install, the target, `make chemacs-profiles` will create a 
-full .emacs-profiles.el with this repo being entered as the OG profile.
+full _~/.emacs-profiles.el_ with this repo being entered as the OG profile.
 
 The default is to use the _stable_ install.  But when I modify my emacs configuration,
-I use the _dev_ installation. Once dev is pushed to github and I'm happy with it
+I use the _dev_ installation. Once _dev_ is pushed to github and I'm happy with it
 I `git pull` a new _stable_ installation.
 
 ## Emacs-home
 
 In the Makefile _emacs-home_ is set to __~/Emacs__ this is where all of the 
-emacs installations will be put.
+emacs installations will be placed.
 
 ## Installation
 
-This is currently in flux as I just added chemacs2 to the mix.
+This is all new as I just added chemacs2 to the mix.
 
   * Fork this repository.
   * Check out your new repository.
@@ -37,14 +40,15 @@ This is currently in flux as I just added chemacs2 to the mix.
   #### This will move _.emacs_ and _.emacs.d_ out of the way if they exist.
   * `make install`  or `make install-all`
   
-  Install will install a stable/default configuraton, and
+  __Install__ will install a stable/default configuraton, and
   will add this repo as a second configuration as __OG__.
   
-  install-all will add a _dev__ configuration, _Doom-emacs_ and _Spacemacs_.
+  __install-all__ will add a _dev_ configuration, _Doom-emacs_ and _Spacemacs_.
   
-  Configurations can also be installed individually
+  Configurations can also be installed individually.  Simple editing 
+  of ~/.emacs-profiles.el will be necessary if installing later.
 
-  `make install-dev install-spacemacs install-doom`
+  `make install-stable install-dev install-spacemacs install-doom`
 
 ### Finish each configuration's install
 
