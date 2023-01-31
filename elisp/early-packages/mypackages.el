@@ -12,6 +12,7 @@
                       windower
                       expand-region
                       dmenu
+                      async
 
                       emms
                       emms-info-mediainfo

@@ -17,58 +17,75 @@ links: mbsync
 clean-links:
 	rm $(HOME)/.mbsyncrc
 
-chemacs:
+# Put this repo into the Chemacs profiles as OG
+# copy it to ~/
+chemacs-profiles:
 	cp .emacs-profiles.el ~/
 
-emacs-home:
+install-emacsn:
+	cp emacsn ~/bin/
+
+mk-emacs-home:
 	mkdir -p $(emacs-home)
 
+# move with preserve dot emacs.
 backup-dot-emacs:
 	[ -f ~/.emacs ] && mv ~/.emacs ~/.emacs.bak
 	[ -d ~/.emacs.d ] && mv ~/.emacs.d ~/.emacs.default
 
-.PHONY: remove-dot-emacs
+# scorch dot emacs.
 remove-dot-emacs:
 	rm -rf ~/.emacs.d
 	rm -f ~/.emacs
 
-install-chemacs: backup-dot-emacs
+# Create a new Chemacs profiles with this repo as OG
+.PHONY: add-og
+add-og:
+	touch .emacs-profiles.el
+	sed 's:FIXME:$(PWD):' emacs-profiles-orig.el > .emacs-profiles.el
+
+# Chemacs goes in emacs.d
+install-chemacs:
 	git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 
-.PHONY: install-doom
+# everyone else goes in emacs home.
 install-doom:
+	sed 's/;;doom//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
-	$(emacs-home)/doom/bin/doom install
 
-update-doom:
-	$(emacs-home)/doom/bin/doom update
-
-remove-doom:
-	rm -rf $(emacs-home)/doom
-
-.PHONY: install-spacemacs
 install-spacemacs:
+	sed 's/;;space//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
 
-remove-spacemacs:
-	rm -rf $(emacs-home)/space
-
-.PHONY: install-dev
 install-dev:
+	sed 's/;;dev//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
 
-.PHONY: install-stable
 install-stable:
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/stable
 
-update-stable:
-	cd $(emacs-home)/stable; git pull origin master
+all: mu4e install-all
 
-.PHONY: install-spacedoom
-install-spacedoom: install-spacemacs install-doom
+# not sure about mu4e installation at this point. I think it just works now.
+# I need to test that.
 
-install-all: install-chemacs install-dev install-stable install-spacedoom
+# prepare for install
+# remove .mbsync, move ~/.emacs, ~/.emacs.d, mkdir emacs home.
+prepare-install: clean-links backup-dot-emacs mk-emacs-home
 
-install-min: install-chemacs install-stable
+# prepare and install links, emacsn, chemacs, chemacs profiles and stable
+install: prepare-install links install-emacsn add-og \
+	install-chemacs chemacs-profiles install-stable
 
-all: mu4e links
+# prepare and install everything we have.
+install-all: install install-dev install-spacemacs install-doom
+
+finish-install:
+	[ -d ~/$(emacs-home)/stable ] && emacs --with-profile stable
+	[ -d ~/$(emacs-home)/dev ] && emacs --with-profile dev
+	[ -d ~/$(emacs-home)/space ] && emacs --with-profile space
+	[ -d ~/$(emacs-home)/doom ] && $(emacs-home)/doom/bin/doom install
+	emacs --with-profile OG

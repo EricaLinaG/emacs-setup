@@ -1,34 +1,40 @@
 
 # My emacs setup. 
 
+<<<<<<< HEAD
 Basically, an old school emacs setup that uses packages. 
+=======
+An old school emacs setup that uses packages. 
+>>>>>>> b0b3aa9140edabe7b9ede0c3b74a93c3d209b92c
 no _use-package_, just elpa, some config files and some extensions
 outside of elpa.
 
 ## Chemacs
 
-This configuration uses [Chemacs2](https://github.com/plexus/chemacs2) 
-as an _Emacs bootloader_ to create 
+as an _Emacs bootloader_ to allow multiple emacs configurations
+to exist at once.
+
+This repo can do install the following:
 __stable__ and __development__ installs of this emacs configuration. 
-There will also be an entry for this repository, __OG__.
-It will also install [_doom-emacs](https://github.com/doomemacs) and 
-[spacemacs](https://github.com/syl20bnr/spacemacs) if desired.
+__OG__ for this repository, as well as __doom__ for 
+[_doom-emacs](https://github.com/doomemacs), and __space__ for 
+[spacemacs](https://github.com/syl20bnr/spacemacs).
 
 On install, the target, `make chemacs-profiles` will create a 
-full .emacs-profiles.el with this repo being entered as the OG profile.
+full _~/.emacs-profiles.el_ with this repo being entered as the OG profile.
 
 The default is to use the _stable_ install.  But when I modify my emacs configuration,
-I use the _dev_ installation. Once dev is pushed to github and I'm happy with it
+I use the _dev_ installation. Once _dev_ is pushed to github and I'm happy with it
 I `git pull` a new _stable_ installation.
 
 ## Emacs-home
 
 In the Makefile _emacs-home_ is set to __~/Emacs__ this is where all of the 
-emacs installations will be put.
+emacs installations will be placed.
 
 ## Installation
 
-This is currently in flux as I just added chemacs2 to the mix.
+This is all new as I just added chemacs2 to the mix.
 
   * Fork this repository.
   * Check out your new repository.
@@ -37,14 +43,15 @@ This is currently in flux as I just added chemacs2 to the mix.
   #### This will move _.emacs_ and _.emacs.d_ out of the way if they exist.
   * `make install`  or `make install-all`
   
-  Install will install a stable/default configuraton, and
+  __Install__ will install a stable/default configuraton, and
   will add this repo as a second configuration as __OG__.
   
-  install-all will add a _dev__ configuration, _Doom-emacs_ and _Spacemacs_.
+  __install-all__ will add a _dev_ configuration, _Doom-emacs_ and _Spacemacs_.
   
-  Configurations can also be installed individually
+  Configurations can also be installed individually.  Simple editing 
+  of ~/.emacs-profiles.el will be necessary if installing later.
 
-  `make install-dev install-spacemacs install-doom`
+  `make install-stable install-dev install-spacemacs install-doom`
 
 ### Finish each configuration's install
 
@@ -83,7 +90,7 @@ This is currently in flux as I just added chemacs2 to the mix.
 I use these installs to insure I always have a way to do work if I have
 broken anything.  I do my elisp work in dev.  When dev is working well and 
 everything is pushed I __make update-stable__ to do a `git pull` and bring 
-it up to date.
+it up to date with _origin/master_.
 
 ### Emacs boot choices
 
@@ -131,8 +138,6 @@ simpler than emacs it's self.;
 
 ## What is here.
 
-*I think* This is a pretty straight forward setup. 
-
 There is an _elisp_ directory full of stuff, mostly configurations and
 extensions which I wrote or borrowed from someone else that aren't available
 as packages. Initialization happens in _elisp/init.el_
@@ -140,12 +145,18 @@ as packages. Initialization happens in _elisp/init.el_
 
 ## The big things; 
 
-- Evil-mode (which can be easily switched off in _elisp/setup.el_).
-- Modus themes.
-- Lots of Hydras.
-- Org
-- Mu4e
-- PosFrame
+- [Evil-mode](https://github.com/emacs-evil/evil)(which can be easily switched off in _elisp/init.el_).
+- [Modus themes.](https://github.com/protesilaos/modus-themes)
+- [Lots of Hydras.](https://github.com/abo-abo/hydra)
+- [Org](https://orgmode.org/)
+- [Mu4e](https://www.emacswiki.org/emacs/mu4e)
+- [Vertico](https://github.com/minad/vertico)
+- [PosFrame](https://github.com/tumashu/posframe)
+- [Dashboard](https://github.com/emacs-dashboard/emacs-dashboard)
+- [undo-tree](https://www.emacswiki.org/emacs/UndoTree)
+
+I've considered [multiple cursors](https://github.com/magnars/multiple-cursors.el) 
+but have not yet tried them out.
 
 I program lots of languages, these are the main ones. They may or may not
 have extended configurations from default. 
@@ -211,7 +222,7 @@ when _mu_ is installed with pacman.
 Everything that can be installed as packages is. *The glaring exception is mu4e.*
 see this page about (installing mu/mu-git/mu4e)[https://www.djcbsoftware.nl/code/mu/mu4e/Installation.html#Installation].  There is a make rule that works to get everthing wired up on Arch Linux. YMMV.
 
-## Keymappings
+## Key mappings
 
 I didn't mess with key mappings except for F keys. 
 My <leader> key is currently __,__ but I am looking to change to __SPC__ and also to
@@ -283,7 +294,6 @@ Included along with evil mode are:
 * [evil-nerd-commenter](https://github.com/redguardtoo/evil-nerd-commenter)
 * [evil-surround](https://github.com/timcharper/evil-surround)
 * evil-org
-* undo-tree
  
 CycleBufs
 ==============
@@ -302,7 +312,7 @@ There is also contextual cycling based on the mode group of the current buffer,
 cycling through shells, *buffers, or file buffers accordingly. 
 
 Cyclebufs will open a shell buffer of your choice based on the value of cb-shell-command. The default is
-eshell. See *vars.el*.  
+eshell. See *vars.el*.
 
 
 ## Themes
