@@ -14,6 +14,17 @@
                       dmenu
                       async
 
+                      vertico
+                      marginalia
+                      consult
+                      embark
+                      embark-consult
+                      general
+                      posframe
+                      vertico-posframe
+                      transient-posframe
+                      which-key-posframe
+
                       emms
                       emms-info-mediainfo
                       emms-mark-ext
