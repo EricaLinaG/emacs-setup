@@ -19,9 +19,16 @@ __OG__ for this repository, as well as __doom__ for
 On install, the target, `make chemacs-profiles` will create a 
 full _~/.emacs-profiles.el_ with this repo being entered as the OG profile.
 
-The default is to use the _stable_ install.  But when I modify my emacs configuration,
-I use the _dev_ installation. Once _dev_ is pushed to github and I'm happy with it
+The default is to use the _OG_ install Simply because that is the only guarantee.
+I change it to _stable_.
+
+When I modify my emacs configuration, I use the _dev_ installation. 
+Once _dev_ is pushed to github and I'm happy with it
 I `git pull` a new _stable_ installation.
+
+__Test__ is another entry in _~/.emacs-profiles.el_.  The Makefile has 
+an _install-test_ rule, which will remove/create/execute an install
+from github, it finishes with `emacs -with-profile test`.
 
 ## Emacs-home
 
@@ -36,13 +43,23 @@ This is all new as I just added chemacs2 to the mix.
   * Check out your new repository.
   * `cd emacs-setup`
 
+### Make targets.
+
   #### This will move _.emacs_ and _.emacs.d_ out of the way if they exist.
   * `make install`  or `make install-all`
   
-  __Install__ will install a stable/default configuraton, and
-  will add this repo as a second configuration as __OG__.
+  __install__ will install chemacs2 and this project as a default configuraton, 
+  called __OG__.
   
-  __install-all__ will add a _dev_ configuration, _Doom-emacs_ and _Spacemacs_.
+  __install-all__ Will add _stable_ and _dev_ configurations, as well as 
+  _Doom-emacs_ and _Spacemacs_ to the location of _emacs-home_ ie. ~/Emacs_.
+
+  Each install has its own make target following this naming pattern.
+  __install-<dev|stable|test|doom|spacemacs>__
+  
+  After installing ala cart doing `make chemacs-profiles` will copy
+  the new profile menu to _~/_ or you can edit _~/.emacs-profiles.el_
+  yourself.
   
   Configurations can also be installed individually.  Simple editing 
   of ~/.emacs-profiles.el will be necessary if installing later.

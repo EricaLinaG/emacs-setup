@@ -93,16 +93,17 @@ install: prepare-install links install-emacsn add-og \
 
 # prepare and install everything we have.
 # the install plus: stable, dev, doom, and space emacs.
-install-all: install install-stable install-dev install-spacemacs install-doom
+install-all: install install-stable install-dev \
+	install-spacemacs install-doom chemacs-profiles
 
 # test a fresh install from github.
 test-install: remove-test install-test
 	emacs --with-profile test
 
-
+# except for doom, just run an instance of each and let them load themselves.
 finish-install:
+	emacs --with-profile OG
 	[ -d ~/$(emacs-home)/stable ] && emacs --with-profile stable
 	[ -d ~/$(emacs-home)/dev ] && emacs --with-profile dev
 	[ -d ~/$(emacs-home)/space ] && emacs --with-profile space
 	[ -d ~/$(emacs-home)/doom ] && $(emacs-home)/doom/bin/doom install
-	emacs --with-profile OG
