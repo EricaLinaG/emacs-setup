@@ -26,6 +26,7 @@ install-emacsn:
 	cp emacsn ~/bin/
 
 mk-emacs-home:
+        touch ~/.config/emacs-custom.el
 	mkdir -p $(emacs-home)
 
 # move with preserve dot emacs.
