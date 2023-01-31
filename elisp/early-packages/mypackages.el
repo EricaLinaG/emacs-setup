@@ -13,18 +13,6 @@
                       expand-region
                       dmenu
 
-                      vertico
-                      marginalia
-                      mini-frame
-                      consult
-                      embark
-                      embark-consult
-                      general
-                      posframe
-                      vertico-posframe
-                      transient-posframe
-                      which-key-posframe
-
                       emms
                       emms-info-mediainfo
                       emms-mark-ext
@@ -237,7 +225,6 @@
 
 
 		      ;; themes
-                      modus-themes
                       doom-themes
                       monokai-theme monokai-alt-theme obsidian-theme atom-dark-theme
                       bubbleberry-theme atom-one-dark-theme
