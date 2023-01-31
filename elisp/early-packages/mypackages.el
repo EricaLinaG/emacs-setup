@@ -237,6 +237,7 @@
 
 
 		      ;; themes
+                      modus-themes
                       doom-themes
                       monokai-theme monokai-alt-theme obsidian-theme atom-dark-theme
                       bubbleberry-theme atom-one-dark-theme
