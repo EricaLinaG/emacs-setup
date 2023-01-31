@@ -150,7 +150,7 @@ while getopts cetdhwm:f:T:b:s:S:p: opt; do
             fi
             ;;
         (p)
-            profile="--with-source-profile "$OPTARG
+            profile="--with-profile "$OPTARG
             ;;
         (s)
             daemon="--daemon="$OPTARG

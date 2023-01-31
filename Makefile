@@ -25,8 +25,10 @@ chemacs-profiles:
 install-emacsn:
 	cp emacsn ~/bin/
 
-mk-emacs-home:
-        touch ~/.config/emacs-custom.el
+touch-custom:
+	touch ~/.config/emacs-custom.el
+
+mk-emacs-home: touch-custom
 	mkdir -p $(emacs-home)
 
 # move with preserve dot emacs.
@@ -60,6 +62,14 @@ install-spacemacs:
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
 
+install-test:
+	sed 's/;;test//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
+	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
+
+remove-test:
+	rm -f $(emacs-home)/test
+
 install-dev:
 	sed 's/;;dev//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
@@ -77,12 +87,18 @@ all: mu4e install-all
 # remove .mbsync, move ~/.emacs, ~/.emacs.d, mkdir emacs home.
 prepare-install: clean-links backup-dot-emacs mk-emacs-home
 
-# prepare and install links, emacsn, chemacs, chemacs profiles and stable
+# prepare and install links, emacsn, chemacs, chemacs profiles
 install: prepare-install links install-emacsn add-og \
-	install-chemacs chemacs-profiles install-stable
+	install-chemacs chemacs-profiles
 
 # prepare and install everything we have.
-install-all: install install-dev install-spacemacs install-doom
+# the install plus: stable, dev, doom, and space emacs.
+install-all: install install-stable install-dev install-spacemacs install-doom
+
+# test a fresh install from github.
+test-install: remove-test install-test
+	emacs --with-profile test
+
 
 finish-install:
 	[ -d ~/$(emacs-home)/stable ] && emacs --with-profile stable

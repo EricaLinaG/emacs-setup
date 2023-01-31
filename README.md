@@ -1,11 +1,7 @@
 
 # My emacs setup. 
 
-<<<<<<< HEAD
-Basically, an old school emacs setup that uses packages. 
-=======
 An old school emacs setup that uses packages. 
->>>>>>> b0b3aa9140edabe7b9ede0c3b74a93c3d209b92c
 no _use-package_, just elpa, some config files and some extensions
 outside of elpa.
 
