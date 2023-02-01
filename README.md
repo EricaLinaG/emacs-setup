@@ -45,27 +45,53 @@ This is all new as I just added chemacs2 to the mix.
 
 ### Make targets.
 
-  #### This will move _.emacs_ and _.emacs.d_ out of the way if they exist.
+Currently, I would suggest a minimum install of stable. The _OG_ install
+could be just fine, but the entries in _~/.emacs-profiles.el_ point at the 
+stable install by default. Although this is easily changed by editing 
+_~/.emacs-profiles.el_.
+The file; _~/.emacs-profiles.el_ is installed with the make target of
+__chemacs-profiles__ this will copy whatever the current .emacs-profiles.el is
+based upon the images installed.
+
+__make install__ Does the following: 
+  - Move _.emacs_ and _.emacs.d_ out of the way if they exist.
+  - Install Chemacs2 into ~/.emacs.d.bak
+  - Create _.emacs-profiles.el with the __OG__ entry pointing here.
+  - Copy _.emacs-profiles.el_, to _~/_
+  
+__make finish-install__ Runs emacs using this installation, ie. 
+The __OG__ chemacs profile. `emacs --with-profile OG`
+
+#### Super Minimal install
+
+This will result only in a profile for __OG__
+
+     make install finish-install
+
+#### Minimal install
+
+This will add a stable image in _~/Emacs/stable_.
+
+    make install install-stable chemacs-profiles finish-install
+
+#### Minimal install with a development image
+
+This will add a stable and dev image in _~/Emacs_
+
+     make install install-stable install-dev chemacs-profiles finish-install
+     
+#### Maximum install
+
+This will install, stable, dev, doom, and space to _~/Emacs_
+
+     make install-all finish-install
+
+My preference is to also install a separate development image.
+
+     make install-dev chemacs-profiles.
+
   * `make install`  or `make install-all`
   
-  __install__ will install chemacs2 and this project as a default configuraton, 
-  called __OG__.
-  
-  __install-all__ Will add _stable_ and _dev_ configurations, as well as 
-  _Doom-emacs_ and _Spacemacs_ to the location of _emacs-home_ ie. ~/Emacs_.
-
-  Each install has its own make target following this naming pattern.
-  __install-<dev|stable|test|doom|spacemacs>__
-  
-  After installing ala cart doing `make chemacs-profiles` will copy
-  the new profile menu to _~/_ or you can edit _~/.emacs-profiles.el_
-  yourself.
-  
-  Configurations can also be installed individually.  Simple editing 
-  of ~/.emacs-profiles.el will be necessary if installing later.
-
-  `make install-stable install-dev install-spacemacs install-doom`
-
 ### Finish each configuration's install
 
   The installs for each emacs configuraton installation need to be run in 
@@ -84,7 +110,7 @@ This is all new as I just added chemacs2 to the mix.
   This can take a bit for each one to finish and they are taking some space
   as each one has its own __elpa__.
       
-  Or you can do it as you go with:
+  Or you can do it manually as you go with:
 
    - `emacs` --with-profile stable --with-debug-init
    - `emacs --with-profile dev`
@@ -97,6 +123,8 @@ This is all new as I just added chemacs2 to the mix.
   Doom, does need to have it's install run.
       - `~/Emacs/doom/bin/doom install`
 
+Note: The first run takes a bit of time as each installation needs to
+install it's packages.
 
 ## Managing elisp development
 
@@ -105,9 +133,21 @@ broken anything.  I do my elisp work in dev.  When dev is working well and
 everything is pushed I __make update-stable__ to do a `git pull` and bring 
 it up to date with _origin/master_.
 
+If I somehow break something, I can fall back to __OG__.
+
+I can test a fresh installation from github with:
+
+    make test-install
+
 ### Emacs boot choices
 
 The boot profile choices are defined in __~/.emacs-profiles__
+Currently stable is target of default, and all of the emacs daemon entries.
+I wonder if stable is even necessary. Although I'm tempted to just delete
+OG altogether. Maybe install stable, from the beginning, and forget OG.
+Although I kind of like having a second, older backup than stable.
+If this is a minimal install there will only be __OG__ and that will
+also be the default.
 
 Emacs profile choices are:
  - stable, default
@@ -115,14 +155,56 @@ Emacs profile choices are:
  - doom
  - space
  - OG  - This repo maybe. The original emacs-setup repo installed from. 
+
+ - Named emacs daemons
+   - Using stable
+     - exwm 
+     - mail 
+     - common 
+
+   - Using doom
+     - doom-server
  
-Emacs will default to _stable_ but can be redirected with
+Emacs will default to __OG__ or __stable__ but can be redirected with
 
     emacs --with-profile dev
 
 or 
 
     emacsn -p dev
+
+### Running emacs client to a server    
+
+Create a new frame, connect to the socket and use vanilla emacs as fallback
+
+    emacsclient -c -s exwm -a emacs
+    emacsclient -c -s mail -a emacs
+    emacsclient -c -s doom -a emacs
+    
+or,  with emacsn
+
+    emacsn -cws exwm
+    emacsn -cws mail
+    emacsn -cws doom
+    
+Use an existing emacsclient frame by omitting the `w`:
+
+    emacsn -cs mail
+
+### Running no name daemons
+
+A vanilla, no-name, daemon
+
+    emacs --daemon &
+or
+    emacsn -d
+
+Doom emacs daemon
+
+    emacs --with-profile doom --daemon &
+or
+    emacsn -dp doom
+    
 
 ## The emacsn script
 
@@ -135,26 +217,34 @@ It is a simple CLI that does all of those things.
 
 `emacsn -h`  will give extensive help with examples.
 
-### emacs daemons, clients, exwm
+### emacs daemons, clients, exwm, mu4e
 
 It runs `mu4e` or my `main-window` function to set up emacs in a 
 standard configuration for a project. 
 It knows how to run any elisp function on startup, 
 it can choose different Chemacs profiles.  Creating multiple daemons
 and using them by name is easy.
-It's easy to add others. It's available in my
-(my dotfiles repo)[http://github.com/EricaLinaG/dotfiles]
+It's easy to add others. 
+
+Running an emacs daemon for mail looks like this.
+
+    emacsn -e --with-profile mail
+    
+Creating a new frame with emacsclient looks like this:
+
+    emacsn -ecws mail
 
 The __emacsn__ script has extensive help and a lot of options. It is
 simpler than emacs it's self.;
 
 
-## What is here.
+## Emacs packages, some explanation of what is here.
 
 There is an _elisp_ directory full of stuff, mostly configurations and
 extensions which I wrote or borrowed from someone else that aren't available
 as packages. Initialization happens in _elisp/init.el_
 
+The package list is in _elisp/early-packages/mypackages.el_.
 
 ## The big things; 
 
@@ -207,7 +297,7 @@ If I forget, the next fresh install will likely fail with package not installed.
 ## Natural Languages
 
 I have been studying French for the last few years.
-Now studying Italian. Working on replacing Anki with Org drill in my routine.
+Now studying Italian. I am working on replacing Anki with Org drill in my routine.
 
 I can also see that I'll probably want to add another language or two in the 
 future. So I've been working to tap into the language capabilities of
@@ -225,9 +315,7 @@ Note:  Need to test __pacman__ installation, might be super simple now.
 
 _Mu4e_ I use mu4e for email. I can't imagine a better email client. There is a
 reasonably basic mu4e configuration with multiple contexts. There is a sample mbsyncrc
-file that can be used to configure _isync/mbsync_.  I have a separate _.emacs-mu4e_ 
-startup file for running an mu4e emacs instance in a terminal, it combines _.emacs_
-and _elisp/setup.el_ into a single startup that is specifically for email in a terminal.
+file that can be used to configure _isync/mbsync_.  
 
 This is a bit easier now than it used to be. Arch Linux seems to install it properly
 when _mu_ is installed with pacman.
@@ -273,7 +361,6 @@ everything you need.
   Or just install the Arch Linux packages.  `yay -S ttf-iosevka ttc-iosevka`
 
 Additional isync/mbsync/mu4e resources [are here:] (http://www.ict4g.net/adolfo/notes/2014/12/27/EmacsIMAP.html)
-
 
 
 ## stuff, to verify and maybe chuck from here down.
