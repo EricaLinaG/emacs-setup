@@ -1,5 +1,9 @@
 emacs-home := ~/Emacs
 
+move-dot-emacs := $(or $(and $(wildcard $(HOME)/.emacs),1),0)
+move-dot-emacs.d := $(or $(and $(wildcard $(HOME)/.emacs.d),1),0)
+seconds-now := $(date +%s)
+
 .PHONY: install
 install: links
 
@@ -17,10 +21,13 @@ links: mbsync
 clean-links:
 	rm $(HOME)/.mbsyncrc
 
-# Put this repo into the Chemacs profiles as OG
-# copy it to ~/
+# copy .emacs-profiles.el to ~/
+.PHONY: chemacs-profiles
 chemacs-profiles:
+	cat .emacs-profiles.el
+	printf "\n\n\n"
 	cp .emacs-profiles.el ~/
+
 
 install-emacsn:
 	cp emacsn ~/bin/
@@ -29,12 +36,28 @@ touch-custom:
 	touch ~/.config/emacs-custom.el
 
 mk-emacs-home: touch-custom
+	printf "Creating Emacs Home: $(emacs-home)\n"
 	mkdir -p $(emacs-home)
 
+.PHONY: mv.emacs
+mv.emacs:
+ifneq ($(move-dot-emacs), 0)
+	ls -l ~/.emacs
+	printf "Moving ~/.emacs\n"
+	mv ~/.emacs ~/.emacs.bak.$(seconds-now)
+endif
+
+.PHONY: mv.emacs.d
+mv.emacs.d:
+ifneq ($(move-dot-emacs.d), 0)
+	ls -l ~/.emacs.d
+	printf "Moving ~/emacs.d\n"
+	mv ~/.emacs.d ~/.emacs.d.bak.$(seconds-now)
+endif
+
 # move with preserve dot emacs.
-backup-dot-emacs:
-	[ -f ~/.emacs ] && mv ~/.emacs ~/.emacs.bak
-	[ -d ~/.emacs.d ] && mv ~/.emacs.d ~/.emacs.default
+.PHONY: backup-dot-emacs
+backup-dot-emacs:  mv.emacs.d mv.emacs
 
 # scorch dot emacs.
 remove-dot-emacs:
@@ -45,24 +68,35 @@ remove-dot-emacs:
 .PHONY: add-og
 add-og:
 	touch .emacs-profiles.el
+	printf "Adding profile for OG\n\n"
 	sed 's:FIXME:$(PWD):' emacs-profiles-orig.el > .emacs-profiles.el
 
 # Chemacs goes in emacs.d
 install-chemacs:
 	git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 
+# Add a gnu profile. Nothing to do really. Point at an empty emacs.d.
+add-gnu:
+	printf "Adding profile for gnu\n\n"
+	sed 's/;;gnu//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
+	mkdir -p $(emacs-home)/gnu
+
 # everyone else goes in emacs home.
 install-doom:
+	printf "Adding profile for doom\n\n"
 	sed 's/;;doom//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
 
 install-spacemacs:
+	printf "Adding profile for spacemacs\n\n"
 	sed 's/;;space//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
 
 install-test:
+	printf "Adding profile for test\n\n"
 	sed 's/;;test//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
@@ -71,11 +105,15 @@ remove-test:
 	rm -f $(emacs-home)/test
 
 install-dev:
+	printf "Adding profile for dev\n\n"
 	sed 's/;;dev//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
 
 install-stable:
+	printf "Adding profile for stable\n\n"
+	sed 's/;;stable//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/stable
 
 all: mu4e install-all
@@ -88,7 +126,7 @@ all: mu4e install-all
 prepare-install: clean-links backup-dot-emacs mk-emacs-home
 
 # prepare and install links, emacsn, chemacs, chemacs profiles
-install: prepare-install links install-emacsn add-og \
+install: prepare-install links install-emacsn add-og add-gnu\
 	install-chemacs chemacs-profiles
 
 # prepare and install everything we have.
@@ -100,10 +138,15 @@ install-all: install install-stable install-dev \
 test-install: remove-test install-test
 	emacs --with-profile test
 
+finish-message := "\n\nThis will run each emacs profile in turn.\n There will be \
+interactions and you will need to\n\n close each emacs\n\n with C-x C-c for the make \
+process to continue.\n\n"
+
 # except for doom, just run an instance of each and let them load themselves.
 finish-install:
+	printf $(finish-message)
 	emacs --with-profile OG
-	[ -d ~/$(emacs-home)/stable ] && emacs --with-profile stable
-	[ -d ~/$(emacs-home)/dev ] && emacs --with-profile dev
-	[ -d ~/$(emacs-home)/space ] && emacs --with-profile space
-	[ -d ~/$(emacs-home)/doom ] && $(emacs-home)/doom/bin/doom install
+	[ -d $(emacs-home)/stable ] && emacs --with-profile stable
+	[ -d $(emacs-home)/dev ] && emacs --with-profile dev
+	[ -d $(emacs-home)/space ] && emacs --with-profile space
+	[ -d $(emacs-home)/doom ] && $(emacs-home)/doom/bin/doom install
