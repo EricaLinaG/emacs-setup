@@ -12,6 +12,7 @@
  ;;dev ("dev"     . ((user-emacs-directory . "~/Emacs/dev/elisp")))
  ;;doom ("doom"    . ((user-emacs-directory . "~/Emacs/doom")))
  ;;space ("space"   . ((user-emacs-directory . "~/Emacs/space")))
+ ;;prelude ("prelude"   . ((user-emacs-directory . "~/Emacs/prelude")))
 
  ;;stable ("exwm" . ((user-emacs-directory . "~/Emacs/stable/elisp")
  ;;stable  	     (server-name . "exwm")))

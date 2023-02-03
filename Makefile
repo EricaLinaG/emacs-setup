@@ -4,11 +4,6 @@ move-dot-emacs := $(or $(and $(wildcard $(HOME)/.emacs),1),0)
 move-dot-emacs.d := $(or $(and $(wildcard $(HOME)/.emacs.d),1),0)
 seconds-now := $(date +%s)
 
-# this got kind of out of hand.
-# some nice generic rules could really help here.
-# still, working well and its clear whats gonig on.
-
-
 
 .PHONY: install
 install: links
@@ -81,46 +76,38 @@ add-og:
 install-chemacs:
 	git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 
-# Add a gnu profile. Nothing to do really. Point at an empty emacs.d.
-add-gnu:
-	printf "Adding profile for gnu\n\n"
-	sed 's/;;gnu//' .emacs-profiles.el > tmp
+# profile targets, and a generic rule to add them into .emacs-profiles.el.
+profiles := OG gnu stable dev test doom space prelude
+$(profiles):
+	printf "Adding profile for $@\n\n"
+	sed 's/;;$@//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
+
+# Add a gnu profile. Nothing to do really. Point at an empty emacs.d.
+add-gnu: gnu
 	mkdir -p $(emacs-home)/gnu
 
 # everyone else goes in emacs home.
-install-doom:
-	printf "Adding profile for doom\n\n"
-	sed 's/;;doom//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
+install-doom: doom
 	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
 	$(emacs-home)/doom/bin/doom install
 
-install-spacemacs:
-	printf "Adding profile for spacemacs\n\n"
-	sed 's/;;space//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
+install-spacemacs: space
 	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
 
-install-test:
-	printf "Adding profile for test\n\n"
-	sed 's/;;test//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
-	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
+install-prelude: prelude
+	git clone https://github.com/bbatsov/prelude.git $(emacs-home)/prelude
+
+install-test: test
+	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/test
 
 remove-test:
 	rm -f $(emacs-home)/test
 
-install-dev:
-	printf "Adding profile for dev\n\n"
-	sed 's/;;dev//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
+install-dev: dev
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
 
-install-stable:
-	printf "Adding profile for stable\n\n"
-	sed 's/;;stable//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
+install-stable: stable
 	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/stable
 
 all: mu4e install-all
@@ -138,8 +125,9 @@ install: prepare-install links install-emacsn add-og add-gnu\
 
 # prepare and install everything we have.
 # the install plus: stable, dev, doom, and space emacs.
-install-all: install install-stable install-dev \
-	install-spacemacs install-doom chemacs-profiles
+# dont install test, but put it into the profiles.
+install-all: install install-stable install-dev test\
+	install-spacemacs install-prelude install-doom chemacs-profiles
 
 # test a fresh install from github.
 test-install: remove-test install-test
@@ -156,3 +144,4 @@ finish-install:
 	[ -d $(emacs-home)/stable ] && emacs --with-profile stable
 	[ -d $(emacs-home)/dev ] && emacs --with-profile dev
 	[ -d $(emacs-home)/space ] && emacs --with-profile space
+	[ -d $(emacs-home)/prelude ] && emacs --with-profile prelude

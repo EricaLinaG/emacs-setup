@@ -118,6 +118,7 @@ This will install, __stable__, __dev__, __doom__, and __space__ to _~/Emacs_
    - `emacs --with-profile dev`
    - `emacs --with-profile space`
    - `emacs --with-profile OG`
+   - `emacs --with-profile prelude`
 
    or similarly:
 
@@ -144,7 +145,7 @@ Currently stable is target of default, and all of the emacs daemon entries.
 I wonder if stable is even necessary. 
 
 If this is a minimal install there will be __gnu__ plain vanilla emacs and 
-this here repo as __OG__ and that will also be the default.
+this here repo as __OG__ which will also be the default.
 
 Installing stable changes the default to stable. 
 If installing individually `make chemacs-profiles` afterward to install the changes.
@@ -155,6 +156,7 @@ Emacs profile choices are:
  - dev
  - doom
  - space
+ - prelude
  - gnu - Completely vanilla gnu emacs.
  - OG  - This repo maybe. The original emacs-setup repo installed from. 
  - test 
