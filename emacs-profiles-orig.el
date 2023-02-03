@@ -5,6 +5,7 @@
 (
  ;;stable ("default" . ((user-emacs-directory . "~/Emacs/stable/elisp")))
  ("OG"      . ((user-emacs-directory . "FIXME/elisp")))
+ ;;gnu ("gnu"      . ((user-emacs-directory . "~/Emacs/gnu")))
  ;;test ("test"      . ((user-emacs-directory . "~/Emacs/test/elisp")))
 
  ;;stable ("stable"  . ((user-emacs-directory . "~/Emacs/stable/elisp")))
