@@ -4,6 +4,12 @@ move-dot-emacs := $(or $(and $(wildcard $(HOME)/.emacs),1),0)
 move-dot-emacs.d := $(or $(and $(wildcard $(HOME)/.emacs.d),1),0)
 seconds-now := $(date +%s)
 
+# this got kind of out of hand.
+# some nice generic rules could really help here.
+# still, working well and its clear whats gonig on.
+
+
+
 .PHONY: install
 install: links
 
@@ -88,6 +94,7 @@ install-doom:
 	sed 's/;;doom//' .emacs-profiles.el > tmp
 	mv tmp .emacs-profiles.el
 	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
+	$(emacs-home)/doom/bin/doom install
 
 install-spacemacs:
 	printf "Adding profile for spacemacs\n\n"
@@ -149,4 +156,3 @@ finish-install:
 	[ -d $(emacs-home)/stable ] && emacs --with-profile stable
 	[ -d $(emacs-home)/dev ] && emacs --with-profile dev
 	[ -d $(emacs-home)/space ] && emacs --with-profile space
-	[ -d $(emacs-home)/doom ] && $(emacs-home)/doom/bin/doom install

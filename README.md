@@ -37,8 +37,6 @@ emacs installations will be placed.
 
 ## Installation
 
-This is all new as I just added chemacs2 to the mix.
-
   * Fork this repository.
   * Check out your new repository.
   * `cd emacs-setup`
@@ -47,55 +45,61 @@ This is all new as I just added chemacs2 to the mix.
 
 Currently, I would suggest a minimum install of stable. The _OG_ install
 could be just fine, but the entries in _~/.emacs-profiles.el_ point at the 
-stable install by default. Although this is easily changed by editing 
-_~/.emacs-profiles.el_.
+stable install by default.  The emacs server profiles also default to __stable__.
+
+Although this is easily changed by editing _~/.emacs-profiles.el_. 
+
 The file; _~/.emacs-profiles.el_ is installed with the make target of
-__chemacs-profiles__ this will copy whatever the current .emacs-profiles.el is
-based upon the images installed.
+__chemacs-profiles__ this will copy whatever the current _.emacs-profiles.el_ is
+based upon the images installed. Each make install profile modifies the 
+_.emacs-profiles.el_ to enable it's self.
 
 __make install__ Does the following: 
   - Move _.emacs_ and _.emacs.d_ out of the way if they exist.
-  - Install Chemacs2 into ~/.emacs.d.bak
-  - Create _.emacs-profiles.el with the __OG__ entry pointing here.
+  - Install Chemacs2 into ~/.emacs.d
+  - Create _.emacs-profiles.el 
+    - __OG__  points here, 
+    - __gnu__ points at _~/Emacs/gnu_.
   - Copy _.emacs-profiles.el_, to _~/_
   
-__make finish-install__ Runs emacs using this installation, ie. 
+__make finish-install__ Runs emacs using the installed profiles, ie. 
 The __OG__ chemacs profile. `emacs --with-profile OG`
 
 #### Super Minimal install
 
-This will result only in a profile for __OG__
+This will result in profiles for __gnu__, and __OG__
 
      make install finish-install
 
 #### Minimal install
 
-This will add a stable image in _~/Emacs/stable_.
+This will add a __stable__ image in _~/Emacs/stable_.
 
     make install install-stable chemacs-profiles finish-install
 
 #### Minimal install with a development image
 
-This will add a stable and dev image in _~/Emacs_
+This will add a __stable__ and __dev__ images in _~/Emacs_
 
      make install install-stable install-dev chemacs-profiles finish-install
      
 #### Maximum install
 
-This will install, stable, dev, doom, and space to _~/Emacs_
+This will install, __stable__, __dev__, __doom__, and __space__ to _~/Emacs_
 
      make install-all finish-install
 
-My preference is to also install a separate development image.
-
-     make install-dev chemacs-profiles.
-
-  * `make install`  or `make install-all`
   
 ### Finish each configuration's install
 
-  The installs for each emacs configuraton installation need to be run in 
-  order for them to install their packages the first time.
+  With the exception __doom__ which has an install script which has already run,
+  the installs for each emacs profile need to be run in 
+  order for them to install their packages the first time. This takes a bit
+  of extra time.
+  
+  Each one will run in turn, and each may have questions. When finished be sure
+  to exit with `C-x C-c` so that the rest of the emacsn will run and load their
+  packages for the first time.  The _gnu_ profile has nothing to do.
   
   Note: This is where things might fail if a package is missing from packages.el 
   or a theme has been deleted from __elpa__.
@@ -106,25 +110,19 @@ My preference is to also install a separate development image.
   installations that exist in 
  _emacs-home_ with the _stable_, _dev_ and _space_ profiles for the first time. 
 
-  It will then execute __doom/bin/doom install__ to install doom packages.
-  This can take a bit for each one to finish and they are taking some space
-  as each one has its own __elpa__.
+  __doom/bin/doom install__ is run immediately after being installed.
       
-  Or you can do it manually as you go with:
+  For rest you can do it manually as you go with:
 
-   - `emacs` --with-profile stable --with-debug-init
+   - `emacs` --with-profile stable --debug-init
    - `emacs --with-profile dev`
    - `emacs --with-profile space`
    - `emacs --with-profile OG`
 
    or similarly:
-   - `emacsn -p <profile name>`
-    
-  Doom, does need to have it's install run.
-      - `~/Emacs/doom/bin/doom install`
 
-Note: The first run takes a bit of time as each installation needs to
-install it's packages.
+   - `emacsn -p dev`
+    
 
 ## Managing elisp development
 
@@ -143,18 +141,23 @@ I can test a fresh installation from github with:
 
 The boot profile choices are defined in __~/.emacs-profiles__
 Currently stable is target of default, and all of the emacs daemon entries.
-I wonder if stable is even necessary. Although I'm tempted to just delete
-OG altogether. Maybe install stable, from the beginning, and forget OG.
-Although I kind of like having a second, older backup than stable.
-If this is a minimal install there will only be __OG__ and that will
-also be the default.
+I wonder if stable is even necessary. 
+
+If this is a minimal install there will be __gnu__ plain vanilla emacs and 
+this here repo as __OG__ and that will also be the default.
+
+Installing stable changes the default to stable. 
+If installing individually `make chemacs-profiles` afterward to install the changes.
+Or edit _~/.emacs-profiles.el_ to suit your desires.
 
 Emacs profile choices are:
  - stable, default
  - dev
  - doom
  - space
+ - gnu - Completely vanilla gnu emacs.
  - OG  - This repo maybe. The original emacs-setup repo installed from. 
+ - test 
 
  - Named emacs daemons
    - Using stable
@@ -173,7 +176,7 @@ or
 
     emacsn -p dev
 
-### Running emacs client to a server    
+### Running emacs client to a server
 
 Create a new frame, connect to the socket and use vanilla emacs as fallback
 
