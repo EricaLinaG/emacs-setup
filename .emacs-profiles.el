@@ -9,7 +9,7 @@
   ("test"      . ((user-emacs-directory . "~/Emacs/test/elisp")))
 
  ;;stable ("stable"  . ((user-emacs-directory . "~/Emacs/stable/elisp")))
- ;;dev ("dev"     . ((user-emacs-directory . "~/Emacs/dev/elisp")))
+  ("dev"     . ((user-emacs-directory . "~/Emacs/dev/elisp")))
  ;;doom ("doom"    . ((user-emacs-directory . "~/Emacs/doom")))
  ;;space ("space"   . ((user-emacs-directory . "~/Emacs/space")))
  ;;prelude ("prelude"   . ((user-emacs-directory . "~/Emacs/prelude")))

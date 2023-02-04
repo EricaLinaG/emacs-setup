@@ -4,21 +4,21 @@
 
 (
  ;;stable ("default" . ((user-emacs-directory . "~/Emacs/stable/elisp")))
- ("OG"      . ((user-emacs-directory . "FIXME/elisp")))
- ;;gnu ("gnu"      . ((user-emacs-directory . "~/Emacs/gnu")))
- ;;test ("test"      . ((user-emacs-directory . "~/Emacs/test/elisp")))
+ ("gnu"      . ((user-emacs-directory . "~/Emacs/gnu")))
+ ("test"      . ((user-emacs-directory . "~/Emacs/test")))
 
- ;;stable ("stable"  . ((user-emacs-directory . "~/Emacs/stable/elisp")))
- ;;dev ("dev"     . ((user-emacs-directory . "~/Emacs/dev/elisp")))
+ ;;stable ("stable"  . ((user-emacs-directory . "~/Emacs/stable")))
+ ;;dev ("dev"     . ((user-emacs-directory . "~/Emacs/dev")))
  ;;doom ("doom"    . ((user-emacs-directory . "~/Emacs/doom")))
  ;;space ("space"   . ((user-emacs-directory . "~/Emacs/space")))
  ;;prelude ("prelude"   . ((user-emacs-directory . "~/Emacs/prelude")))
 
- ;;stable ("exwm" . ((user-emacs-directory . "~/Emacs/stable/elisp")
+ ;; Servers
+ ;;stable ("exwm" . ((user-emacs-directory . "~/Emacs/stable")
  ;;stable  	     (server-name . "exwm")))
- ;;stable ("mail" . ((user-emacs-directory . "~/Emacs/stable/elisp")
+ ;;stable ("mail" . ((user-emacs-directory . "~/Emacs/stable")
  ;;stable 	     (server-name . "mail")))
- ;;stable ("common" . ((user-emacs-directory . "~/Emacs/stable/elisp")
+ ;;stable ("common" . ((user-emacs-directory . "~/Emacs/stable")
  ;;stable 	       (server-name . "common")))
 
  ;;doom ("doom-server" . ((user-emacs-directory . "~/.doom-emacs")

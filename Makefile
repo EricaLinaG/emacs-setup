@@ -1,23 +1,98 @@
-emacs-home := ~/Emacs
+# where emacs installations will live.
+emacs-home := ~/Emacsa
 
+# where to put emacsn helper script
+emacsn-home := ~/bin
+config-custom := ~/.config/emacs-custom.el
+
+emacs-setup := ericalinag/emacs-setup
+
+# emacs installation repos
+default-emacs-repo := ericalinag/ericas-emacs.git
+dev-repo := $(default-emacs-repo)
+stable-repo := $(default-emacs-repo)
+test-repo := $(default-emacs-repo)
+
+# we can use the plain vanilla emacs to load our packages.
+# We just have to be where we want them.
+
+# ericas-emacs has install.el and update.el which can be run like this
+# we just need to add the final install name.
+default-install-cmd-pre := emacs --with-profile gnu --script install.el --chdir $(emacs-home)
+default-update-cmd-pre := emacs --with-profile gnu --script update.el --chdir $(emacs-home)
+
+dev-install-cmd := $(default-install-cmd-pre)/dev
+dev-update-cmd := $(default-update-cmd-pre)/dev
+
+test-install-cmd := $(default-install-cmd-pre)/test
+test-update-cmd := $(default-update-cmd-pre)/test
+
+stable-install-cmd := $(default-install-cmd-pre)/stable
+stable-update-cmd := $(default-update-cmd-pre)/stable
+
+# spacemacs doesn't provide a way to install or update besides (list-packages)
+# so we just run it.
+space-repo := syl20bnr/spacemacs.git
+space-install-cmd := emacs --with-profile space
+space-update-cmd := emacs --with-profile space
+
+# prelude doesn't provide a way to install or update besides (list-packages)
+# so we just run it.
+prelude-repo := bbatsov/prelude.git
+prelude-install-cmd := emacs --with-profile prelude
+prelude-update-cmd := emacs --with-profile prelude
+
+# doom has hybrid shell/elisp scripts to run.
+doom-repo := hlissner/doom-emacs.git
+doom-install-cmd := $(emacs-home)/doom/bin/doom install
+doom-update-cmd := $(emacs-home)/doom/bin/doom update
+
+# find out if we have a .emacs and .emacs.d to worry about.
 move-dot-emacs := $(or $(and $(wildcard $(HOME)/.emacs),1),0)
 move-dot-emacs.d := $(or $(and $(wildcard $(HOME)/.emacs.d),1),0)
+# so we can have uniquely named backups. being lazy.
 seconds-now := $(date +%s)
 
+# test if target replaces inside a variable name. It does.
+testit-repo := someplace-far-far-away
+testit:
+	printf "$($@-repo)"
 
-.PHONY: install
-install: links
+# diagnostic rule.
+# make print-VARIABLE
+print-%  : ; @echo $* = $($*)
 
+# profiles that can be installed, and updated.
+profiles := gnu stable dev test doom space prelude
+
+# profile targets, and a generic rule
+# add them into .emacs-profiles.el.
+# clone them to their target directory.
+# do what we can to get them to do their initial load.
+$(profiles):
+	printf "Adding profile for $@\n\n"
+	sed 's/;;$@//' .emacs-profiles.el > tmp
+	mv tmp .emacs-profiles.el
+	printf "cloning repo for $@\n\n"
+	git clone https://github.com/$($@-repo) $(emacs-home)/$@
+	printf "Running install for $@\n\n"
+	printf "Exit with C-x C-c as needed when done\n\n"
+	$($@-install-cmd)
+
+
+update-targets := dev-update stable-update test-update space-update doom-update prelude-update
+$(update-targets):
+	printf "Running update for profile: $@\n\n"
+	$($@-cmd)
+
+# is there a better way? I hope so.
 .PHONY: mu4e
-mu4e:
+mu4e: mbsync
 	cp -r ~/.cache/yay/mu-git/src/mu/mu4e $(HOME)/elisp/extensions/
 
 .PHONY: mbsync
 mbsync:
 	ln -s $(PWD)/mbsyncrc $(HOME)/.mbsyncrc
-
-.PHONY: links
-links: mbsync
 
 clean-links:
 	rm $(HOME)/.mbsyncrc
@@ -29,22 +104,24 @@ chemacs-profiles:
 	printf "\n\n\n"
 	cp .emacs-profiles.el ~/
 
-
 install-emacsn:
-	cp emacsn ~/bin/
+	mkdir -p $(emacsn-home)
+	cp emacsn $(emacsn-home)
 
 touch-custom:
-	touch ~/.config/emacs-custom.el
+	touch $(config-custom)
 
 mk-emacs-home: touch-custom
 	printf "Creating Emacs Home: $(emacs-home)\n"
+	git clone $(emacs-setup) $(emacs-home)
 	mkdir -p $(emacs-home)
 
+# These move .emacs and .emacs.d to .bak.<epoch seconds>
 .PHONY: mv.emacs
 mv.emacs:
 ifneq ($(move-dot-emacs), 0)
 	ls -l ~/.emacs
-	printf "Moving ~/.emacs\n"
+	printf "Moving ~/.emacs to .bak.xxxx\n"
 	mv ~/.emacs ~/.emacs.bak.$(seconds-now)
 endif
 
@@ -52,7 +129,7 @@ endif
 mv.emacs.d:
 ifneq ($(move-dot-emacs.d), 0)
 	ls -l ~/.emacs.d
-	printf "Moving ~/emacs.d\n"
+	printf "Moving ~/emacs.d to .bak.xxxxx\n"
 	mv ~/.emacs.d ~/.emacs.d.bak.$(seconds-now)
 endif
 
@@ -62,53 +139,19 @@ backup-dot-emacs:  mv.emacs.d mv.emacs
 
 # scorch dot emacs.
 remove-dot-emacs:
+	printf "Removing ~/.emacs and ~/.emacs.d\n\n"
 	rm -rf ~/.emacs.d
 	rm -f ~/.emacs
 
-# Create a new Chemacs profiles with this repo as OG
-.PHONY: add-og
-add-og:
-	touch .emacs-profiles.el
-	printf "Adding profile for OG\n\n"
-	sed 's:FIXME:$(PWD):' emacs-profiles-orig.el > .emacs-profiles.el
-
 # Chemacs goes in emacs.d
 install-chemacs:
+	printf "Cloning chemacs into ~/.emacs.d\n\n"
 	git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
-
-# profile targets, and a generic rule to add them into .emacs-profiles.el.
-profiles := OG gnu stable dev test doom space prelude
-$(profiles):
-	printf "Adding profile for $@\n\n"
-	sed 's/;;$@//' .emacs-profiles.el > tmp
-	mv tmp .emacs-profiles.el
 
 # Add a gnu profile. Nothing to do really. Point at an empty emacs.d.
 add-gnu: gnu
 	mkdir -p $(emacs-home)/gnu
-
-# everyone else goes in emacs home.
-install-doom: doom
-	git clone https://github.com/hlissner/doom-emacs $(emacs-home)/doom
-	$(emacs-home)/doom/bin/doom install
-
-install-spacemacs: space
-	git clone https://github.com/syl20bnr/spacemacs $(emacs-home)/space
-
-install-prelude: prelude
-	git clone https://github.com/bbatsov/prelude.git $(emacs-home)/prelude
-
-install-test: test
-	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/test
-
-remove-test:
-	rm -f $(emacs-home)/test
-
-install-dev: dev
-	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/dev
-
-install-stable: stable
-	git clone https://github.com/ericalinag/emacs-setup $(emacs-home)/stable
+	mkdir -p $(emacs-home)/test
 
 all: mu4e install-all
 
@@ -116,32 +159,29 @@ all: mu4e install-all
 # I need to test that.
 
 # prepare for install
-# remove .mbsync, move ~/.emacs, ~/.emacs.d, mkdir emacs home.
-prepare-install: clean-links backup-dot-emacs mk-emacs-home
+#  move ~/.emacs, ~/.emacs.d, mkdir emacs home.
+prepare-install: backup-dot-emacs mk-emacs-home
 
-# prepare and install links, emacsn, chemacs, chemacs profiles
-install: prepare-install links install-emacsn add-og add-gnu\
-	install-chemacs chemacs-profiles
+# prepare and install emacsn, chemacs, chemacs profiles, stable and dev
+# This includes gnu and test profiles which are vanilla gnu emacs
+install: prepare-install install-emacsn add-gnu\
+	install-chemacs stable dev chemacs-profiles
 
 # prepare and install everything we have.
-# the install plus: stable, dev, doom, and space emacs.
-# dont install test, but put it into the profiles.
-install-all: install install-stable install-dev test\
-	install-spacemacs install-prelude install-doom chemacs-profiles
+# the install plus: doom, spacemacs, and prelude.
+install-all: install test space prelude doom chemacs-profiles
 
-# test a fresh install from github.
-test-install: remove-test install-test
-	emacs --with-profile test
+# make targets for managing the testing a fresh install.
+# Nuke it so we can clone a new one.
+remove-test:
+	printf "Removing the test install\n"
+	rm -f $(emacs-home)/test
 
-finish-message := "\n\nThis will run each emacs profile in turn.\n There will be \
-interactions and you will need to\n\n close each emacs\n\n with C-x C-c for the make \
-process to continue.\n\n"
+# clean it out so we can still use it as vanilla
+clean-test:
+	printf "Cleaning out the test install\n"
+	rm -f $(emacs-home)/test/*
 
-# except for doom, just run an instance of each and let them load themselves.
-finish-install:
-	printf $(finish-message)
-	emacs --with-profile OG
-	[ -d $(emacs-home)/stable ] && emacs --with-profile stable
-	[ -d $(emacs-home)/dev ] && emacs --with-profile dev
-	[ -d $(emacs-home)/space ] && emacs --with-profile space
-	[ -d $(emacs-home)/prelude ] && emacs --with-profile prelude
+# Remove the current test, and test a fresh install from github.
+test-install: remove-test test
+	emacs --with-profile test --debug-init
